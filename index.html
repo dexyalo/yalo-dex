@@ -1,0 +1,514 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#080b14">
+<meta name="description" content="YALO DEX - Your gateway to decentralized finance.">
+<title>YALO DEX | Decentralized Finance</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+:root {
+  --bg:#080b14;
+  --panel:#101626;
+  --panel2:#151e31;
+  --text:#f5f7ff;
+  --muted:#929db4;
+  --green:#a6ff55;
+  --blue:#4e8cff;
+  --border:rgba(255,255,255,.08);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:Inter,sans-serif;
+  overflow-x:hidden;
+}
+a{text-decoration:none;color:inherit}
+button{font-family:inherit;cursor:pointer}
+.container{width:min(1160px,92%);margin:auto}
+header{
+  position:sticky;top:0;z-index:100;
+  background:rgba(8,11,20,.92);
+  backdrop-filter:blur(18px);
+  border-bottom:1px solid var(--border);
+}
+.nav{
+  height:76px;display:flex;align-items:center;
+  justify-content:space-between;
+}
+.logo{display:flex;align-items:center;gap:11px;font-weight:900;font-size:22px}
+.logo-icon{
+  width:39px;height:39px;border-radius:12px;
+  display:grid;place-items:center;
+  color:#080b14;background:var(--green);
+  font-weight:900;font-size:21px;
+}
+.logo span{color:var(--green)}
+.nav-links{display:flex;gap:25px;align-items:center}
+.nav-links a{font-size:13px;color:var(--muted);font-weight:600}
+.nav-links a:hover{color:var(--green)}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;
+  gap:9px;border:0;border-radius:10px;
+  padding:13px 19px;font-size:13px;font-weight:800;
+  transition:.2s;
+}
+.btn-primary{background:var(--green);color:#08100a}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 25px #a6ff5530}
+.btn-outline{border:1px solid var(--border);background:var(--panel);color:white}
+.menu-btn{display:none;background:none;color:white;border:0;font-size:23px}
+.hero{padding:100px 0 80px;position:relative;overflow:hidden}
+.hero:before{
+  content:"";position:absolute;width:500px;height:500px;
+  background:#a6ff5510;filter:blur(100px);
+  border-radius:50%;top:-200px;left:30%;
+}
+.hero-content{position:relative;max-width:780px;margin:auto;text-align:center}
+.tag{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:9px 14px;border:1px solid #a6ff5535;
+  background:#a6ff550c;border-radius:30px;
+  color:var(--green);font-size:11px;font-weight:800;
+  letter-spacing:1px;
+}
+.tag i{font-size:8px}
+.hero h1{
+  font-size:clamp(43px,8vw,78px);
+  line-height:1.06;letter-spacing:-4px;
+  margin:25px 0 20px;font-weight:900;
+}
+.hero h1 span{color:var(--green)}
+.hero p{color:var(--muted);line-height:1.8;font-size:15px;max-width:610px;margin:auto}
+.hero-actions{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-top:32px}
+.hero-stats{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  max-width:650px;margin:65px auto 0;
+  border:1px solid var(--border);border-radius:15px;
+  background:#10162690;
+}
+.stat{padding:22px 10px;text-align:center}
+.stat:not(:last-child){border-right:1px solid var(--border)}
+.stat h3{font-size:21px;margin-bottom:6px}
+.stat p{font-size:11px;color:var(--muted)}
+section{padding:75px 0}
+.section-heading{text-align:center;margin-bottom:38px}
+.section-heading small{color:var(--green);font-weight:800;letter-spacing:2px;font-size:10px}
+.section-heading h2{font-size:clamp(27px,5vw,39px);margin:12px 0}
+.section-heading p{color:var(--muted);font-size:13px;line-height:1.8}
+.panel{
+  background:var(--panel);border:1px solid var(--border);
+  border-radius:17px;padding:24px;
+}
+.announcement{
+  border:1px solid #a6ff5530;
+  background:linear-gradient(120deg,#a6ff5512,#101626 70%);
+  border-radius:18px;padding:30px;
+  display:flex;align-items:center;justify-content:space-between;gap:20px;
+}
+.announcement h2{font-size:25px;margin:12px 0}
+.announcement p{font-size:13px;line-height:1.8;color:var(--muted);max-width:650px}
+.coming{
+  display:inline-block;padding:6px 10px;
+  border-radius:20px;background:#ffb84d15;
+  border:1px solid #ffb84d40;color:#ffbd61;
+  font-size:9px;font-weight:900;letter-spacing:1px;
+}
+.features{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:16px;
+}
+.feature{
+  background:var(--panel);border:1px solid var(--border);
+  border-radius:15px;padding:23px;transition:.2s;
+}
+.feature:hover{transform:translateY(-4px);border-color:#a6ff5550}
+.feature-icon{
+  width:43px;height:43px;border-radius:12px;
+  display:grid;place-items:center;
+  color:var(--green);background:#a6ff5512;
+  font-size:18px;margin-bottom:18px;
+}
+.feature h3{font-size:15px;margin-bottom:9px}
+.feature p{font-size:12px;line-height:1.7;color:var(--muted);margin-bottom:17px}
+.feature-bottom{display:flex;align-items:center;justify-content:space-between}
+.feature-bottom span{font-size:10px;color:var(--muted)}
+.feature-bottom button{
+  background:none;border:0;color:var(--green);
+  font-size:11px;font-weight:800;
+}
+.overview{
+  display:grid;grid-template-columns:1fr 1fr;gap:35px;align-items:center
+}
+.overview h2{font-size:36px;line-height:1.2;margin:15px 0}
+.overview p{font-size:13px;color:var(--muted);line-height:1.9}
+.checks{margin-top:24px;display:grid;gap:15px}
+.check{display:flex;gap:12px;align-items:center;font-size:13px}
+.check i{color:var(--green)}
+.overview-card{
+  background:linear-gradient(145deg,#17243a,#0c1220);
+  border:1px solid var(--border);border-radius:20px;padding:28px;
+}
+.overview-card h3{font-size:17px;margin-bottom:20px}
+.fake-row{
+  display:flex;justify-content:space-between;
+  padding:17px 0;border-bottom:1px solid var(--border);
+  font-size:12px;
+}
+.fake-row span:last-child{color:var(--green)}
+.community{
+  text-align:center;padding:45px 25px;
+  border:1px solid var(--border);border-radius:20px;
+  background:linear-gradient(140deg,#a6ff5510,#101626);
+}
+.community h2{font-size:30px;margin-bottom:12px}
+.community p{color:var(--muted);font-size:13px;line-height:1.8}
+.socials{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-top:25px}
+.social{
+  width:48px;height:48px;border-radius:13px;
+  border:1px solid var(--border);background:var(--panel);
+  display:grid;place-items:center;font-size:18px;
+  transition:.2s;
+}
+.social:hover{color:var(--green);border-color:var(--green);transform:translateY(-3px)}
+footer{border-top:1px solid var(--border);padding:35px 0}
+.footer-content{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap}
+.footer-content p{font-size:11px;color:var(--muted);line-height:1.8}
+.footer-links{display:flex;gap:18px;flex-wrap:wrap}
+.footer-links a{font-size:11px;color:var(--muted)}
+.footer-links a:hover{color:var(--green)}
+.notice{
+  position:fixed;bottom:25px;left:50%;transform:translate(-50%,150px);
+  background:#18243a;border:1px solid #a6ff5550;
+  color:white;padding:15px 20px;border-radius:12px;
+  z-index:300;font-size:12px;transition:.3s;
+  box-shadow:0 10px 40px #0008;text-align:center;
+  width:max-content;max-width:90%;
+}
+.notice.show{transform:translate(-50%,0)}
+@media(max-width:800px){
+  .nav-links{
+    display:none;position:absolute;top:76px;left:0;width:100%;
+    background:#0d1321;padding:25px;
+    flex-direction:column;align-items:flex-start;
+    border-bottom:1px solid var(--border);
+  }
+  .nav-links.active{display:flex}
+  .menu-btn{display:block}
+  .nav>.btn{display:none}
+  .features{grid-template-columns:repeat(2,1fr)}
+  .overview{grid-template-columns:1fr}
+  .announcement{align-items:flex-start;flex-direction:column}
+}
+@media(max-width:520px){
+  .hero{padding:75px 0 55px}
+  .hero h1{letter-spacing:-2px}
+  .features{grid-template-columns:1fr}
+  .hero-stats{margin-top:45px}
+  .stat h3{font-size:17px}
+  .stat p{font-size:9px}
+  section{padding:55px 0}
+  .footer-content{flex-direction:column;align-items:flex-start}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="container nav">
+    <a class="logo" href="#home">
+      <div class="logo-icon">Y</div>
+      YALO<span>DEX</span>
+    </a>
+
+    <nav class="nav-links" id="navLinks">
+      <a href="#home">Home</a>
+      <a href="#features">Features</a>
+      <a href="#ecosystem">Ecosystem</a>
+      <a href="#token">Token</a>
+      <a href="#community">Community</a>
+    </nav>
+
+    <button class="btn btn-primary" onclick="comingSoon()">Launch App <i class="fa-solid fa-arrow-up-right-from-square"></i></button>
+    <button class="menu-btn" onclick="toggleMenu()" aria-label="Open menu">
+      <i class="fa-solid fa-bars"></i>
+    </button>
+  </div>
+</header>
+
+<main>
+
+<section class="hero" id="home">
+  <div class="container hero-content">
+    <div class="tag"><i class="fa-solid fa-circle"></i> THE FUTURE OF DECENTRALIZED FINANCE</div>
+
+    <h1>Trade Smarter.<br><span>Think Beyond.</span></h1>
+
+    <p>
+      Welcome to YALO DEX — your gateway to the evolving world of decentralized finance.
+      Explore a new vision for crypto trading, digital assets and Web3 innovation.
+    </p>
+
+    <div class="hero-actions">
+      <button class="btn btn-primary" onclick="comingSoon()">Explore YALO DEX <i class="fa-solid fa-arrow-right"></i></button>
+      <a href="#features" class="btn btn-outline">Explore Features</a>
+    </div>
+
+    <div class="hero-stats">
+      <div class="stat">
+        <h3>Web3</h3>
+        <p>Decentralized Vision</p>
+      </div>
+      <div class="stat">
+        <h3>Multi-Feature</h3>
+        <p>Digital Finance Platform</p>
+      </div>
+      <div class="stat">
+        <h3>Coming Soon</h3>
+        <p>Platform Launch</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="token">
+  <div class="container">
+    <div class="announcement">
+      <div>
+        <span class="tag">YALO TOKEN UPDATE</span>
+        <h2>Something Big Is Coming.</h2>
+        <p>
+          Our native token is planned to go live in the Torch Ecosystem.
+          We are preparing for an exciting new chapter in the YALO DEX journey.
+          Stay tuned for official announcements, updates and launch details.
+        </p>
+      </div>
+      <span class="coming">COMING SOON</span>
+    </div>
+  </div>
+</section>
+
+<section id="features">
+  <div class="container">
+    <div class="section-heading">
+      <small>EXPLORE OUR PLATFORM</small>
+      <h2>Everything in One Ecosystem</h2>
+      <p>Discover the features planned for the YALO DEX ecosystem.</p>
+    </div>
+
+    <div class="features">
+
+      <div class="feature">
+        <div class="feature-icon"><i class="fa-solid fa-chart-line"></i></div>
+        <h3>Dashboard</h3>
+        <p>A central place to explore your planned YALO DEX activities and platform information.</p>
+        <div class="feature-bottom"><span>Platform Overview</span><span class="coming">COMING SOON</span></div>
+      </div>
+
+      <div class="feature">
+        <div class="feature-icon"><i class="fa-solid fa-arrows-rotate"></i></div>
+        <h3>Token Swap</h3>
+        <p>Swap supported digital assets through a planned decentralized trading experience.</p>
+        <div class="feature-bottom"><span>DEX Trading</span><span class="coming">COMING SOON</span></div>
+      </div>
+
+      <div class="feature">
+        <div class="feature-icon"><i class="fa-brands fa-bitcoin"></i></div>
+        <h3>Buy Crypto</h3>
+        <p>Explore the upcoming options for accessing digital assets.</p>
+        <div class="feature-bottom"><span>Crypto Access</span><span class="coming">COMING SOON</span></div>
+      </div>
+
+      <div class="feature">
+        <div class="feature-icon"><i class="fa-solid fa-coins"></i></div>
+        <h3>Staking</h3>
+        <p>Discover planned staking features for supported digital assets.</p>
+        <div class="feature-bottom"><span>Earn Features</span><span class="coming">COMING SOON</span></div>
+      </div>
+
+      <div class="feature">
+        <div class="feature-icon"><i class="fa-solid fa-wallet"></i></div>
+        <h3>Deposit</h3>
+        <p>Deposit functionality is planned for a future platform release.</p>
+        <div class="feature-bottom"><span>Asset Management</span><span class="coming">COMING SOON</span></div>
+      </div>
+
+      <div class="feature">
+        <div class="feature-icon"><i class="fa-solid fa-money-bill-transfer"></i></div>
+        <h3>Withdraw</h3>
+        <p>Withdrawal tools are planned and are not currently available.</p>
+        <div class="feature-bottom"><span>Asset Transfers</span><span class="coming">COMING SOON</span></div>
+      </div>
+
+      <div class="feature">
+        <div class="feature-icon"><i class="fa-solid fa-chart-pie"></i></div>
+        <h3>Portfolio</h3>
+        <p>A planned overview of digital asset holdings and portfolio activity.</p>
+        <div class="feature-bottom"><span>Portfolio Tracking</span><span class="coming">COMING SOON</span></div>
+      </div>
+
+      <div class="feature">
+        <div class="feature-icon"><i class="fa-solid fa-clock-rotate-left"></i></div>
+        <h3>Transaction History</h3>
+        <p>Explore a planned history view for platform transactions.</p>
+        <div class="feature-bottom"><span>Activity Tracking</span><span class="coming">COMING SOON</span></div>
+      </div>
+
+      <div class="feature">
+        <div class="feature-icon"><i class="fa-solid fa-bullseye"></i></div>
+        <h3>Prediction Market</h3>
+        <p>A future prediction market experience is part of our ecosystem vision.</p>
+        <div class="feature-bottom"><span>Prediction</span><span class="coming">COMING SOON</span></div>
+      </div>
+
+      <div class="feature">
+        <div class="feature-icon"><i class="fa-solid fa-link"></i></div>
+        <h3>Connect Wallet</h3>
+        <p>Wallet connection support is planned. No wallet is connected on this page.</p>
+        <div class="feature-bottom"><span>Web3 Wallet</span><span class="coming">COMING SOON</span></div>
+      </div>
+
+      <div class="feature">
+        <div class="feature-icon"><i class="fa-solid fa-shield-halved"></i></div>
+        <h3>Security</h3>
+        <p>Security-focused development is part of our platform roadmap.</p>
+        <div class="feature-bottom"><span>Platform Security</span><span class="coming">COMING SOON</span></div>
+      </div>
+
+      <div class="feature">
+        <div class="feature-icon"><i class="fa-solid fa-rocket"></i></div>
+        <h3>Web3 Ecosystem</h3>
+        <p>More decentralized finance tools and ecosystem features are planned.</p>
+        <div class="feature-bottom"><span>Future Development</span><span class="coming">COMING SOON</span></div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section id="ecosystem">
+  <div class="container overview">
+    <div>
+      <span class="tag">ABOUT YALO DEX</span>
+      <h2>A New Vision for Decentralized Finance.</h2>
+      <p>
+        YALO DEX is being developed as a multi-feature decentralized finance platform.
+        Our vision is to bring different Web3 and digital asset experiences together
+        in one ecosystem.
+      </p>
+
+      <div class="checks">
+        <div class="check"><i class="fa-solid fa-circle-check"></i> Decentralized finance vision</div>
+        <div class="check"><i class="fa-solid fa-circle-check"></i> Multiple planned platform features</div>
+        <div class="check"><i class="fa-solid fa-circle-check"></i> Web3 ecosystem development</div>
+        <div class="check"><i class="fa-solid fa-circle-check"></i> Community-driven growth</div>
+      </div>
+    </div>
+
+    <div class="overview-card">
+      <h3>YALO DEX Ecosystem</h3>
+      <div class="fake-row"><span>Swap</span><span>Coming Soon</span></div>
+      <div class="fake-row"><span>Staking</span><span>Coming Soon</span></div>
+      <div class="fake-row"><span>Portfolio</span><span>Coming Soon</span></div>
+      <div class="fake-row"><span>Prediction Market</span><span>Coming Soon</span></div>
+      <div class="fake-row"><span>YALO Token</span><span>Coming Soon</span></div>
+      <div class="fake-row"><span>Wallet Integration</span><span>Coming Soon</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="community">
+  <div class="container">
+    <div class="community">
+      <span class="tag">JOIN THE YALO COMMUNITY</span>
+      <h2>Be Part of the Journey.</h2>
+      <p>
+        Follow our official channels to receive project announcements,
+        ecosystem updates and future launch information.
+      </p>
+
+      <div class="socials">
+        <a class="social" href="https://t.me/yalo0x" target="_blank" rel="noopener noreferrer" aria-label="Telegram"><i class="fa-brands fa-telegram"></i></a>
+        <a class="social" href="https://x.com/0xYalo" target="_blank" rel="noopener noreferrer" aria-label="X"><i class="fa-brands fa-x-twitter"></i></a>
+        <a class="social" href="https://www.facebook.com/profile.php?id=61596664225595" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+        <a class="social" href="mailto:modcrypto@0xyalo.xyz" aria-label="Email"><i class="fa-solid fa-envelope"></i></a>
+      </div>
+
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="https://t.me/yalo0x" target="_blank" rel="noopener noreferrer">
+          Join Telegram <i class="fa-solid fa-arrow-right"></i>
+        </a>
+        <a class="btn btn-outline" href="https://x.com/0xYalo" target="_blank" rel="noopener noreferrer">
+          Follow on X
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="container footer-content">
+    <div>
+      <a class="logo" href="#home">
+        <div class="logo-icon">Y</div>
+        YALO<span>DEX</span>
+      </a>
+      <p style="margin-top:12px">Building the future of decentralized finance.</p>
+      <p>Contact: <a href="mailto:modcrypto@0xyalo.xyz">modcrypto@0xyalo.xyz</a></p>
+    </div>
+
+    <div class="footer-links">
+      <a href="#home">Home</a>
+      <a href="#features">Features</a>
+      <a href="#token">Token</a>
+      <a href="https://t.me/yalo0x" target="_blank" rel="noopener noreferrer">Telegram</a>
+      <a href="https://x.com/0xYalo" target="_blank" rel="noopener noreferrer">X</a>
+      <a href="https://www.facebook.com/profile.php?id=61596664225595" target="_blank" rel="noopener noreferrer">Facebook</a>
+    </div>
+  </div>
+
+  <div class="container" style="margin-top:25px;padding-top:20px;border-top:1px solid var(--border)">
+    <p>© <span id="year"></span> YALO DEX. All rights reserved.</p>
+    <p style="margin-top:8px">Disclaimer: YALO DEX features displayed on this website are under development and are not currently available. This website does not process transactions or connect wallets.</p>
+  </div>
+</footer>
+
+<div class="notice" id="notice">
+  <i class="fa-solid fa-clock"></i> This feature is coming soon. Stay tuned!
+</div>
+
+<script>
+function comingSoon(){
+  const notice=document.getElementById("notice");
+  notice.classList.add("show");
+  clearTimeout(window.noticeTimer);
+  window.noticeTimer=setTimeout(()=>{
+    notice.classList.remove("show");
+  },3000);
+}
+
+function toggleMenu(){
+  document.getElementById("navLinks").classList.toggle("active");
+}
+
+document.querySelectorAll("#navLinks a").forEach(link=>{
+  link.addEventListener("click",()=>{
+    document.getElementById("navLinks").classList.remove("active");
+  });
+});
+
+document.getElementById("year").textContent=new Date().getFullYear();
+</script>
+
+</body>
+  </html>
+                                      
