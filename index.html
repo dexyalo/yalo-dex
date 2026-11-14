@@ -1,17 +1,18 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#080b14">
-<meta name="description" content="YALO DEX - Your gateway to decentralized finance and live Robinhood Chain token markets.">
-<title>YALO DEX | Decentralized Finance</title>
+<title>YALO DEX | Trade Smarter</title>
+<meta name="description" content="YALO DEX — Explore tokens, track markets and discover the YALO ecosystem.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 <style>
-:root {
+:root{
   --bg:#080b14;
   --panel:#101626;
   --panel2:#151e31;
@@ -20,354 +21,190 @@
   --green:#a6ff55;
   --blue:#4e8cff;
   --border:rgba(255,255,255,.08);
+  --red:#ff626f;
 }
-*{margin:0;padding:0;box-sizing:border-box}
+*{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
 body{
   background:var(--bg);
   color:var(--text);
-  font-family:Inter,sans-serif;
-  overflow-x:hidden;
+  font-family:Inter,Arial,sans-serif;
+  line-height:1.6;
 }
 a{text-decoration:none;color:inherit}
-button{font-family:inherit;cursor:pointer}
+button,input{font:inherit}
 .container{width:min(1160px,92%);margin:auto}
-
 header{
   position:sticky;top:0;z-index:100;
   background:rgba(8,11,20,.92);
-  backdrop-filter:blur(18px);
+  backdrop-filter:blur(16px);
   border-bottom:1px solid var(--border);
 }
 .nav{
-  height:76px;display:flex;align-items:center;
-  justify-content:space-between;
+  min-height:76px;display:flex;align-items:center;
+  justify-content:space-between;gap:20px;
 }
-.logo{
-  display:flex;align-items:center;gap:11px;
-  font-weight:900;font-size:22px;
-}
-.logo-icon{
-  width:39px;height:39px;border-radius:12px;
-  display:grid;place-items:center;
-  color:#080b14;background:var(--green);
-  font-weight:900;font-size:21px;
-}
+.logo{font-size:26px;font-weight:900;letter-spacing:-1.5px}
 .logo span{color:var(--green)}
-.nav-links{display:flex;gap:22px;align-items:center}
-.nav-links a{
-  font-size:12px;color:var(--muted);font-weight:600;
-}
+.nav-links{display:flex;align-items:center;gap:25px}
+.nav-links a{font-size:13px;color:var(--muted);font-weight:600}
 .nav-links a:hover{color:var(--green)}
-.btn{
-  display:inline-flex;align-items:center;justify-content:center;
-  gap:9px;border:0;border-radius:10px;
-  padding:13px 19px;font-size:13px;font-weight:800;
-  transition:.2s;
-}
-.btn-primary{background:var(--green);color:#08100a}
-.btn-primary:hover{
-  transform:translateY(-2px);
-  box-shadow:0 8px 25px #a6ff5530;
-}
-.btn-outline{
-  border:1px solid var(--border);
-  background:var(--panel);color:white;
+.nav-cta,.primary-btn{
+  background:var(--green);color:#10170b;
+  border:0;border-radius:9px;padding:12px 19px;
+  font-weight:800;cursor:pointer;display:inline-block;
 }
 .menu-btn{
-  display:none;background:none;color:white;
-  border:0;font-size:23px;
+  display:none;background:transparent;color:white;
+  border:1px solid var(--border);padding:8px 12px;border-radius:8px;
 }
-
-.hero{
-  padding:100px 0 80px;
-  position:relative;overflow:hidden;
-}
-.hero:before{
-  content:"";position:absolute;width:500px;height:500px;
-  background:#a6ff5510;filter:blur(100px);
-  border-radius:50%;top:-200px;left:30%;
-}
-.hero-content{
-  position:relative;max-width:780px;
-  margin:auto;text-align:center;
-}
+.hero{padding:100px 0 85px;text-align:center}
 .tag{
-  display:inline-flex;align-items:center;gap:8px;
-  padding:9px 14px;border:1px solid #a6ff5535;
-  background:#a6ff550c;border-radius:30px;
-  color:var(--green);font-size:11px;font-weight:800;
-  letter-spacing:1px;
+  display:inline-block;padding:7px 13px;
+  border:1px solid rgba(166,255,85,.25);
+  border-radius:30px;color:var(--green);
+  font-size:12px;font-weight:700;margin-bottom:25px;
 }
-.tag i{font-size:8px}
 .hero h1{
-  font-size:clamp(43px,8vw,78px);
-  line-height:1.06;letter-spacing:-4px;
-  margin:25px 0 20px;font-weight:900;
+  font-size:clamp(42px,7vw,76px);
+  line-height:1.08;letter-spacing:-3px;
+  max-width:900px;margin:0 auto 22px;
 }
 .hero h1 span{color:var(--green)}
 .hero p{
-  color:var(--muted);line-height:1.8;
-  font-size:15px;max-width:610px;margin:auto;
+  max-width:650px;margin:0 auto 30px;
+  color:var(--muted);font-size:16px;
 }
-.hero-actions{
-  display:flex;justify-content:center;
-  gap:12px;flex-wrap:wrap;margin-top:32px;
+.hero-actions{display:flex;justify-content:center;gap:13px;flex-wrap:wrap}
+.secondary-btn{
+  border:1px solid var(--border);padding:12px 19px;
+  border-radius:9px;font-weight:700;
 }
-.hero-stats{
-  display:grid;grid-template-columns:repeat(3,1fr);
-  max-width:650px;margin:65px auto 0;
-  border:1px solid var(--border);border-radius:15px;
-  background:#10162690;
-}
-.stat{padding:22px 10px;text-align:center}
-.stat:not(:last-child){border-right:1px solid var(--border)}
-.stat h3{font-size:21px;margin-bottom:6px}
-.stat p{font-size:11px;color:var(--muted)}
-
+.secondary-btn:hover{border-color:var(--green)}
 section{padding:75px 0}
 .section-heading{text-align:center;margin-bottom:38px}
-.section-heading small{
-  color:var(--green);font-weight:800;
-  letter-spacing:2px;font-size:10px;
-}
-.section-heading h2{
-  font-size:clamp(27px,5vw,39px);margin:12px 0;
-}
-.section-heading p{
-  color:var(--muted);font-size:13px;line-height:1.8;
-}
+.section-heading h2{font-size:clamp(28px,4vw,42px);letter-spacing:-1.5px}
+.section-heading p{color:var(--muted);margin-top:9px}
 .panel{
-  background:var(--panel);
-  border:1px solid var(--border);
-  border-radius:17px;padding:24px;
+  background:var(--panel);border:1px solid var(--border);
+  border-radius:18px;padding:25px;
 }
 .announcement{
-  border:1px solid #a6ff5530;
-  background:linear-gradient(120deg,#a6ff5512,#101626 70%);
-  border-radius:18px;padding:30px;
-  display:flex;align-items:center;
-  justify-content:space-between;gap:20px;
+  display:flex;align-items:center;justify-content:space-between;
+  gap:25px;flex-wrap:wrap;
 }
-.announcement h2{font-size:25px;margin:12px 0}
-.announcement p{
-  font-size:13px;line-height:1.8;
-  color:var(--muted);max-width:650px;
+.announcement h3{font-size:25px;margin-bottom:8px}
+.announcement p{color:var(--muted);max-width:620px}
+.status{
+  display:inline-flex;align-items:center;gap:8px;
+  color:var(--green);font-size:12px;font-weight:700;
 }
-.coming{
-  display:inline-block;padding:6px 10px;
-  border-radius:20px;background:#ffb84d15;
-  border:1px solid #ffb84d40;color:#ffbd61;
-  font-size:9px;font-weight:900;letter-spacing:1px;
+.dot{width:8px;height:8px;background:var(--green);border-radius:50%}
+.tracker-panel{padding:24px}
+.tracker-top{
+  display:flex;justify-content:space-between;align-items:center;
+  flex-wrap:wrap;gap:15px;margin-bottom:20px;
 }
+.tracker-top h3{font-size:22px}
+.live-label{color:var(--green);font-size:12px;font-weight:800}
+.search-area{display:flex;gap:10px;margin-bottom:12px}
+.search-area input{
+  flex:1;min-width:0;background:#080d19;
+  border:1px solid var(--border);border-radius:9px;
+  padding:14px;color:white;outline:none;
+}
+.search-area input:focus{border-color:var(--green)}
+.search-area button,.refresh-btn{
+  border:0;border-radius:9px;padding:12px 18px;
+  background:var(--green);color:#10170b;
+  font-weight:800;cursor:pointer;
+}
+.search-help{font-size:11px;color:var(--muted);margin-bottom:18px}
+.tracker-status{
+  padding:12px 14px;background:#0b1220;
+  border-radius:9px;color:var(--muted);
+  font-size:12px;margin-bottom:18px;
+}
+.tracker-status.error{color:var(--red)}
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;min-width:780px}
+th{
+  text-align:left;color:var(--muted);font-size:10px;
+  letter-spacing:.7px;padding:14px 12px;
+  border-bottom:1px solid var(--border);
+}
+td{padding:16px 12px;border-bottom:1px solid var(--border);font-size:12px}
+.token-name{font-weight:800}
+.token-symbol{color:var(--muted);font-size:11px}
+.positive{color:var(--green)}
+.negative{color:var(--red)}
+.pair-link{color:var(--green);font-weight:700}
+.empty{text-align:center;color:var(--muted);padding:35px}
+.token-countdown{font-size:11px;color:var(--muted);margin-top:12px}
 .features{
-  display:grid;grid-template-columns:repeat(3,1fr);gap:16px;
+  display:grid;grid-template-columns:repeat(3,1fr);gap:15px;
 }
 .feature{
-  background:var(--panel);
-  border:1px solid var(--border);
-  border-radius:15px;padding:23px;transition:.2s;
+  background:var(--panel);border:1px solid var(--border);
+  border-radius:14px;padding:22px;transition:.2s;
 }
-.feature:hover{
-  transform:translateY(-4px);
-  border-color:#a6ff5550;
+.feature:hover{transform:translateY(-4px);border-color:rgba(166,255,85,.4)}
+.feature-icon{font-size:25px;margin-bottom:13px}
+.feature h3{font-size:16px;margin-bottom:7px}
+.feature p{font-size:12px;color:var(--muted)}
+.ecosystem{
+  display:grid;grid-template-columns:repeat(2,1fr);gap:15px;
 }
-.feature-icon{
-  width:43px;height:43px;border-radius:12px;
-  display:grid;place-items:center;
-  color:var(--green);background:#a6ff5512;
-  font-size:18px;margin-bottom:18px;
+.eco-card{
+  background:var(--panel);border:1px solid var(--border);
+  border-radius:14px;padding:24px;
 }
-.feature h3{font-size:15px;margin-bottom:9px}
-.feature p{
-  font-size:12px;line-height:1.7;
-  color:var(--muted);margin-bottom:17px;
+.eco-card h3{font-size:19px;margin-bottom:7px}
+.eco-card p{color:var(--muted);font-size:13px}
+.eco-status{color:var(--green);font-size:11px;font-weight:800;margin-top:15px}
+.community{text-align:center}
+.community p{color:var(--muted);max-width:600px;margin:12px auto 25px}
+.socials{display:flex;justify-content:center;gap:12px;flex-wrap:wrap}
+.socials a{
+  border:1px solid var(--border);padding:11px 18px;
+  border-radius:9px;font-size:13px;font-weight:700;
 }
-.feature-bottom{
-  display:flex;align-items:center;
-  justify-content:space-between;gap:8px;
+.socials a:hover{border-color:var(--green);color:var(--green)}
+footer{
+  border-top:1px solid var(--border);
+  padding:30px 0;color:var(--muted);font-size:12px;
 }
-.feature-bottom span{font-size:10px;color:var(--muted)}
-.overview{
-  display:grid;grid-template-columns:1fr 1fr;
-  gap:35px;align-items:center;
-}
-.overview h2{
-  font-size:36px;line-height:1.2;margin:15px 0;
-}
-.overview p{
-  font-size:13px;color:var(--muted);line-height:1.9;
-}
-.checks{margin-top:24px;display:grid;gap:15px}
-.check{display:flex;gap:12px;align-items:center;font-size:13px}
-.check i{color:var(--green)}
-.overview-card{
-  background:linear-gradient(145deg,#17243a,#0c1220);
-  border:1px solid var(--border);
-  border-radius:20px;padding:28px;
-}
-.overview-card h3{font-size:17px;margin-bottom:20px}
-.fake-row{
-  display:flex;justify-content:space-between;
-  padding:17px 0;border-bottom:1px solid var(--border);
-  font-size:12px;
-}
-.fake-row span:last-child{color:var(--green)}
-.community{
-  text-align:center;padding:45px 25px;
-  border:1px solid var(--border);border-radius:20px;
-  background:linear-gradient(140deg,#a6ff5510,#101626);
-}
-.community h2{font-size:30px;margin-bottom:12px}
-.community p{
-  color:var(--muted);font-size:13px;line-height:1.8;
-}
-.socials{
-  display:flex;justify-content:center;
-  gap:12px;flex-wrap:wrap;margin-top:25px;
-}
-.social{
-  width:48px;height:48px;border-radius:13px;
-  border:1px solid var(--border);
-  background:var(--panel);
-  display:grid;place-items:center;font-size:18px;
-  transition:.2s;
-}
-.social:hover{
-  color:var(--green);border-color:var(--green);
-  transform:translateY(-3px);
-}
-footer{border-top:1px solid var(--border);padding:35px 0}
-.footer-content{
-  display:flex;justify-content:space-between;
-  align-items:center;gap:20px;flex-wrap:wrap;
-}
-.footer-content p{
-  font-size:11px;color:var(--muted);line-height:1.8;
-}
-.footer-links{display:flex;gap:18px;flex-wrap:wrap}
-.footer-links a{font-size:11px;color:var(--muted)}
-.footer-links a:hover{color:var(--green)}
-.notice{
-  position:fixed;bottom:25px;left:50%;
-  transform:translate(-50%,150px);
-  background:#18243a;border:1px solid #a6ff5550;
-  color:white;padding:15px 20px;border-radius:12px;
-  z-index:300;font-size:12px;transition:.3s;
-  box-shadow:0 10px 40px #0008;text-align:center;
-  width:max-content;max-width:90%;
-}
-.notice.show{transform:translate(-50%,0)}
-
-/* TOKEN TRACKER */
-.tracker-panel{
-  background:var(--panel);
-  border:1px solid var(--border);
-  border-radius:17px;padding:24px;
-}
-.tracker-top{
-  display:flex;justify-content:space-between;
-  align-items:center;gap:15px;flex-wrap:wrap;
-}
-.tracker-top h3{font-size:17px}
-.tracker-status{
-  color:var(--muted);font-size:11px;
-  margin-top:7px;line-height:1.6;
-}
-.tracker-live{
-  color:var(--green);font-size:10px;font-weight:800;
-}
-.tracker-live i{font-size:7px;margin-right:5px}
-.tracker-search{
-  display:flex;gap:10px;margin:25px 0 15px;
-}
-.tracker-search input{
-  flex:1;min-width:0;padding:14px;
-  border-radius:10px;background:#080b14;
-  border:1px solid var(--border);color:white;
-  font-family:inherit;outline:none;
-}
-.tracker-search input:focus{border-color:var(--green)}
-.tracker-controls{
-  display:flex;justify-content:space-between;
-  align-items:center;gap:12px;flex-wrap:wrap;
-  margin-bottom:15px;
-}
-.tracker-table-wrap{overflow-x:auto}
-.tracker-table{
-  width:100%;border-collapse:collapse;
-  min-width:760px;font-size:12px;
-}
-.tracker-table th{
-  text-align:left;padding:15px 12px;
-  color:var(--muted);font-size:10px;
-  letter-spacing:.6px;border-bottom:1px solid var(--border);
-}
-.tracker-table td{
-  padding:16px 12px;
-  border-bottom:1px solid var(--border);
-  white-space:nowrap;
-}
-.tracker-table tbody tr:hover{background:#ffffff05}
-.tracker-token{font-weight:800}
-.tracker-symbol{color:var(--muted);font-size:10px;margin-top:5px}
-.tracker-dex{color:var(--muted);font-size:10px;margin-top:5px}
-.tracker-table a{color:var(--green);font-weight:700}
-.tracker-empty{
-  padding:38px 10px;text-align:center;
-  color:var(--muted);font-size:12px;
-}
-.tracker-empty i{
-  font-size:24px;color:var(--green);margin-bottom:12px;
-}
-.tracker-note{
-  font-size:10px;color:var(--muted);
-  line-height:1.8;margin-top:18px;
-}
-.tracker-actions{display:flex;gap:10px;align-items:center}
-.tracker-search .btn{white-space:nowrap}
-.tracker-table td:first-child{min-width:145px}
-.tracker-error{color:#ff7777}
-.positive{color:#58e69a}
-.negative{color:#ff7777}
+.footer-inner{display:flex;justify-content:space-between;gap:15px;flex-wrap:wrap}
+footer strong{color:white}
 @media(max-width:800px){
   .nav-links{
-    display:none;position:absolute;top:76px;left:0;
-    width:100%;background:#0d1321;padding:25px;
+    display:none;position:absolute;top:76px;left:0;width:100%;
+    background:#0c1220;padding:20px;
     flex-direction:column;align-items:flex-start;
     border-bottom:1px solid var(--border);
   }
-  .nav-links.active{display:flex}
+  .nav-links.open{display:flex}
   .menu-btn{display:block}
-  .nav>.btn{display:none}
+  .nav-cta{display:none}
   .features{grid-template-columns:repeat(2,1fr)}
-  .overview{grid-template-columns:1fr}
-  .announcement{align-items:flex-start;flex-direction:column}
 }
-@media(max-width:520px){
-  .hero{padding:75px 0 55px}
+@media(max-width:550px){
+  .hero{padding:75px 0 60px}
   .hero h1{letter-spacing:-2px}
-  .features{grid-template-columns:1fr}
-  .hero-stats{margin-top:45px}
-  .stat h3{font-size:17px}
-  .stat p{font-size:9px}
   section{padding:55px 0}
-  .footer-content{flex-direction:column;align-items:flex-start}
-  .tracker-panel{padding:15px}
-  .tracker-search{flex-direction:column}
-  .tracker-search .btn{width:100%}
-  .tracker-controls{align-items:flex-start}
+  .features,.ecosystem{grid-template-columns:1fr}
+  .search-area{flex-wrap:wrap}
+  .search-area button{width:100%}
+  .panel{padding:17px}
 }
 </style>
 </head>
 
 <body>
+
 <header>
   <div class="container nav">
-    <a class="logo" href="#home">
-      <div class="logo-icon">Y</div>
-      YALO<span>DEX</span>
-    </a>
+    <a href="#home" class="logo">YALO<span>.</span></a>
 
     <nav class="nav-links" id="navLinks">
       <a href="#home">Home</a>
@@ -378,127 +215,81 @@ footer{border-top:1px solid var(--border);padding:35px 0}
       <a href="#community">Community</a>
     </nav>
 
-    <button class="btn btn-primary" onclick="comingSoon()">
-      Launch App <i class="fa-solid fa-arrow-up-right-from-square"></i>
-    </button>
-
-    <button class="menu-btn" onclick="toggleMenu()" aria-label="Open menu">
-      <i class="fa-solid fa-bars"></i>
-    </button>
+    <a class="nav-cta" href="#tracker">Explore Tokens</a>
+    <button class="menu-btn" onclick="toggleMenu()">☰</button>
   </div>
 </header>
 
 <main>
 
 <section class="hero" id="home">
-  <div class="container hero-content">
-    <div class="tag">
-      <i class="fa-solid fa-circle"></i>
-      THE FUTURE OF DECENTRALIZED FINANCE
-    </div>
-
+  <div class="container">
+    <div class="tag">THE FUTURE OF DECENTRALIZED TRADING</div>
     <h1>Trade Smarter.<br><span>Think Beyond.</span></h1>
-
     <p>
-      Welcome to YALO DEX — your gateway to the evolving world of decentralized finance.
-      Explore a new vision for crypto trading, digital assets and Web3 innovation.
+      Welcome to YALO DEX — an evolving Web3 ecosystem
+      built to make decentralized trading and digital finance
+      more accessible.
     </p>
-
     <div class="hero-actions">
-      <button class="btn btn-primary" onclick="comingSoon()">
-        Explore YALO DEX <i class="fa-solid fa-arrow-right"></i>
-      </button>
-      <a href="#features" class="btn btn-outline">Explore Features</a>
-    </div>
-
-    <div class="hero-stats">
-      <div class="stat">
-        <h3>Web3</h3>
-        <p>Decentralized Vision</p>
-      </div>
-      <div class="stat">
-        <h3>Multi-Feature</h3>
-        <p>Digital Finance Platform</p>
-      </div>
-      <div class="stat">
-        <h3>Coming Soon</h3>
-        <p>Platform Launch</p>
-      </div>
+      <a href="#tracker" class="primary-btn">Explore Token Tracker</a>
+      <a href="#ecosystem" class="secondary-btn">Discover YALO</a>
     </div>
   </div>
 </section>
 
 <section id="token">
   <div class="container">
-    <div class="announcement">
+    <div class="panel announcement">
       <div>
-        <span class="tag">YALO TOKEN UPDATE</span>
-        <h2>Something Big Is Coming.</h2>
+        <div class="status"><span class="dot"></span> YALO ECOSYSTEM UPDATE</div>
+        <h3>Something Big Is Coming</h3>
         <p>
-          Our native token is planned to go live in the Torch Ecosystem.
-          We are preparing for an exciting new chapter in the YALO DEX journey.
-          Stay tuned for official announcements, updates and launch details.
+          We are building the YALO ecosystem step by step.
+          Follow our official channels for verified updates
+          and announcements.
         </p>
       </div>
-      <span class="coming">COMING SOON</span>
+      <a href="https://x.com/0xYalo" target="_blank" rel="noopener" class="primary-btn">
+        Follow YALO
+      </a>
     </div>
   </div>
 </section>
 
-<!-- TOKEN TRACKER -->
 <section id="tracker">
   <div class="container">
     <div class="section-heading">
-      <small>LIVE BLOCKCHAIN DATA</small>
-      <h2>Robinhood Chain Token Tracker</h2>
-      <p>
-        Search tokens by name, symbol or contract address.
-        Powered by DEX Screener market data.
-      </p>
+      <h2>Token Tracker</h2>
+      <p>Discover and monitor tokens on Robinhood Chain.</p>
     </div>
 
-    <div class="tracker-panel">
+    <div class="panel tracker-panel">
       <div class="tracker-top">
-        <div>
-          <h3>
-            <i class="fa-solid fa-chart-line" style="color:var(--green)"></i>
-            Robinhood Chain Markets
-          </h3>
-          <p class="tracker-status">Network: Robinhood Chain</p>
-        </div>
-
-        <span class="tracker-live">
-          <i class="fa-solid fa-circle"></i> LIVE MARKET DATA
-        </span>
+        <h3>Robinhood Market Explorer</h3>
+        <span class="live-label">● LIVE TRACKER</span>
       </div>
 
-      <form class="tracker-search" id="trackerForm">
+      <form class="search-area" id="searchForm">
         <input
           type="text"
           id="tokenSearch"
-          placeholder="Token name, symbol or contract address..."
+          placeholder="Search token name, symbol or contract address..."
           autocomplete="off"
-          required
         >
-        <button class="btn btn-primary" type="submit">
-          <i class="fa-solid fa-magnifying-glass"></i> Search
-        </button>
+        <button type="submit">Search</button>
       </form>
 
-      <div class="tracker-controls">
-        <p class="tracker-status" id="trackerStatus" aria-live="polite">
-          Loading token market data...
-        </p>
+      <p class="search-help">
+        Auto search is enabled. Start typing to discover matching tokens.
+      </p>
 
-        <div class="tracker-actions">
-          <button class="btn btn-outline" id="refreshTracker" type="button">
-            <i class="fa-solid fa-rotate"></i> Refresh
-          </button>
-        </div>
+      <div class="tracker-status" id="trackerStatus">
+        Initializing token tracker...
       </div>
 
-      <div class="tracker-table-wrap">
-        <table class="tracker-table">
+      <div class="table-wrap">
+        <table>
           <thead>
             <tr>
               <th>TOKEN / PAIR</th>
@@ -510,25 +301,15 @@ footer{border-top:1px solid var(--border);padding:35px 0}
               <th>CHART</th>
             </tr>
           </thead>
-
-          <tbody id="trackerResults">
-            <tr>
-              <td colspan="7">
-                <div class="tracker-empty">
-                  <i class="fa-solid fa-chart-simple"></i>
-                  <p>Loading market data...</p>
-                </div>
-              </td>
-            </tr>
+          <tbody id="tokenRows">
+            <tr><td colspan="7" class="empty">Loading tokens...</td></tr>
           </tbody>
         </table>
       </div>
 
-      <p class="tracker-note">
-        Market data is provided by DEX Screener. Prices and market information may change rapidly.
-        Results depend on available trading pairs and third-party API availability.
-        This tracker does not execute trades.
-      </p>
+      <div class="token-countdown" id="countdown">
+        Next market refresh in 15 seconds.
+      </div>
     </div>
   </div>
 </section>
@@ -536,105 +317,328 @@ footer{border-top:1px solid var(--border);padding:35px 0}
 <section id="features">
   <div class="container">
     <div class="section-heading">
-      <small>EXPLORE OUR PLATFORM</small>
-      <h2>Everything in One Ecosystem</h2>
-      <p>Discover the features planned for the YALO DEX ecosystem.</p>
+      <h2>Explore YALO Features</h2>
+      <p>Tools and services planned for the YALO ecosystem.</p>
     </div>
 
     <div class="features">
-
-      <div class="feature">
-        <div class="feature-icon"><i class="fa-solid fa-chart-line"></i></div>
-        <h3>Dashboard</h3>
-        <p>A central place to explore your planned YALO DEX activities and platform information.</p>
-        <div class="feature-bottom"><span>Platform Overview</span><span class="coming">COMING SOON</span></div>
-      </div>
-
-      <div class="feature">
-        <div class="feature-icon"><i class="fa-solid fa-arrows-rotate"></i></div>
-        <h3>Token Swap</h3>
-        <p>Swap supported digital assets through a planned decentralized trading experience.</p>
-        <div class="feature-bottom"><span>DEX Trading</span><span class="coming">COMING SOON</span></div>
-      </div>
-
-      <div class="feature">
-        <div class="feature-icon"><i class="fa-brands fa-bitcoin"></i></div>
-        <h3>Buy Crypto</h3>
-        <p>Explore the upcoming options for accessing digital assets.</p>
-        <div class="feature-bottom"><span>Crypto Access</span><span class="coming">COMING SOON</span></div>
-      </div>
-
-      <div class="feature">
-        <div class="feature-icon"><i class="fa-solid fa-coins"></i></div>
-        <h3>Staking</h3>
-        <p>Discover planned staking features for supported digital assets.</p>
-        <div class="feature-bottom"><span>Earn Features</span><span class="coming">COMING SOON</span></div>
-      </div>
-
-      <div class="feature">
-        <div class="feature-icon"><i class="fa-solid fa-wallet"></i></div>
-        <h3>Deposit</h3>
-        <p>Deposit functionality is planned for a future platform release.</p>
-        <div class="feature-bottom"><span>Asset Management</span><span class="coming">COMING SOON</span></div>
-      </div>
-
-      <div class="feature">
-        <div class="feature-icon"><i class="fa-solid fa-money-bill-transfer"></i></div>
-        <h3>Withdraw</h3>
-        <p>Withdrawal tools are planned and are not currently available.</p>
-        <div class="feature-bottom"><span>Asset Transfers</span><span class="coming">COMING SOON</span></div>
-      </div>
-
-      <div class="feature">
-        <div class="feature-icon"><i class="fa-solid fa-chart-pie"></i></div>
-        <h3>Portfolio</h3>
-        <p>A planned overview of digital asset holdings and portfolio activity.</p>
-        <div class="feature-bottom"><span>Portfolio Tracking</span><span class="coming">COMING SOON</span></div>
-      </div>
-
-      <div class="feature">
-        <div class="feature-icon"><i class="fa-solid fa-clock-rotate-left"></i></div>
-        <h3>Transaction History</h3>
-        <p>Explore a planned history view for platform transactions.</p>
-        <div class="feature-bottom"><span>Activity Tracking</span><span class="coming">COMING SOON</span></div>
-      </div>
-
-      <div class="feature">
-        <div class="feature-icon"><i class="fa-solid fa-bullseye"></i></div>
-        <h3>Prediction Market</h3>
-        <p>A future prediction market experience is part of our ecosystem vision.</p>
-        <div class="feature-bottom"><span>Prediction</span><span class="coming">COMING SOON</span></div>
-      </div>
-
-      <div class="feature">
-        <div class="feature-icon"><i class="fa-solid fa-link"></i></div>
-        <h3>Connect Wallet</h3>
-        <p>Wallet connection support is planned. No wallet is connected on this page.</p>
-        <div class="feature-bottom"><span>Web3 Wallet</span><span class="coming">COMING SOON</span></div>
-      </div>
-
-      <div class="feature">
-        <div class="feature-icon"><i class="fa-solid fa-shield-halved"></i></div>
-        <h3>Security</h3>
-        <p>Security-focused development is part of our platform roadmap.</p>
-        <div class="feature-bottom"><span>Platform Security</span><span class="coming">COMING SOON</span></div>
-      </div>
-
-      <div class="feature">
-        <div class="feature-icon"><i class="fa-solid fa-rocket"></i></div>
-        <h3>Web3 Ecosystem</h3>
-        <p>More decentralized finance tools and ecosystem features are planned.</p>
-        <div class="feature-bottom"><span>Future Development</span><span class="coming">COMING SOON</span></div>
-      </div>
-
+      <div class="feature"><div class="feature-icon">📊</div><h3>Dashboard</h3><p>Monitor your crypto activity in one place.</p></div>
+      <div class="feature"><div class="feature-icon">🔄</div><h3>Token Swap</h3><p>Explore decentralized token swapping.</p></div>
+      <div class="feature"><div class="feature-icon">💳</div><h3>Buy Crypto</h3><p>Explore convenient crypto purchase options.</p></div>
+      <div class="feature"><div class="feature-icon">🔐</div><h3>Staking</h3><p>Discover potential staking opportunities.</p></div>
+      <div class="feature"><div class="feature-icon">📥</div><h3>Deposit</h3><p>Manage supported digital asset deposits.</p></div>
+      <div class="feature"><div class="feature-icon">📤</div><h3>Withdraw</h3><p>Manage supported asset withdrawals.</p></div>
+      <div class="feature"><div class="feature-icon">💼</div><h3>Portfolio</h3><p>View your digital asset portfolio.</p></div>
+      <div class="feature"><div class="feature-icon">📜</div><h3>Transaction History</h3><p>Keep track of your transactions.</p></div>
+      <div class="feature"><div class="feature-icon">🎯</div><h3>Prediction Market</h3><p>Explore prediction market possibilities.</p></div>
+      <div class="feature"><div class="feature-icon">👛</div><h3>Connect Wallet</h3><p>Connect supported Web3 wallets.</p></div>
+      <div class="feature"><div class="feature-icon">🛡️</div><h3>Security</h3><p>Security-focused ecosystem development.</p></div>
+      <div class="feature"><div class="feature-icon">🌐</div><h3>Web3 Ecosystem</h3><p>Discover products across the YALO ecosystem.</p></div>
     </div>
   </div>
 </section>
 
 <section id="ecosystem">
-  <div class="container overview">
-    <div>
-      <span class="tag">ABOUT YALO DEX</span>
-      <h2>A New Vision for Decentralized Finance.</h2>
-      <p>
-        YALO DEX is building toward a connected digital
+  <div class="container">
+    <div class="section-heading">
+      <h2>The YALO Ecosystem</h2>
+      <p>One vision. Multiple products.</p>
+    </div>
+
+    <div class="ecosystem">
+      <div class="eco-card">
+        <h3>YALO DEX</h3>
+        <p>A decentralized trading platform and token discovery experience.</p>
+        <div class="eco-status">● BUILDING</div>
+      </div>
+      <div class="eco-card">
+        <h3>YALO Wallet</h3>
+        <p>A wallet concept designed to bring multiple crypto experiences together.</p>
+        <div class="eco-status">● PLANNED</div>
+      </div>
+      <div class="eco-card">
+        <h3>YALO PAY</h3>
+        <p>A digital payment product being explored for the YALO ecosystem.</p>
+        <div class="eco-status">● PLANNED</div>
+      </div>
+      <div class="eco-card">
+        <h3>YALO Token Ecosystem</h3>
+        <p>Follow official channels for verified token and ecosystem announcements.</p>
+        <div class="eco-status">● UPDATES COMING</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="community">
+  <div class="container community">
+    <div class="section-heading">
+      <h2>Join the YALO Community</h2>
+    </div>
+    <p>
+      Stay connected with the official YALO community.
+      Get product updates, announcements and important information
+      directly from our official channels.
+    </p>
+
+    <div class="socials">
+      <a href="https://t.me/yalo0x" target="_blank" rel="noopener">Telegram</a>
+      <a href="https://x.com/0xYalo" target="_blank" rel="noopener">X / Twitter</a>
+      <a href="https://www.facebook.com/profile.php?id=61596664225595" target="_blank" rel="noopener">Facebook</a>
+      <a href="mailto:modcrypto@0xyalo.xyz">Email</a>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="container footer-inner">
+    <div><strong>YALO.</strong> © <span id="year"></span> YALO Ecosystem. All rights reserved.</div>
+    <div>Built for the decentralized future.</div>
+  </div>
+</footer>
+
+<script>
+/* ================================
+   YALO DEX WEBSITE FUNCTIONS
+================================ */
+
+const DEFAULT_TOKEN_ADDRESS =
+  "0x18E674231A58c239Dc7DaeDcffE15Ec3A24cff5c";
+
+const CHAIN_ID = "robinhood";
+const API_SEARCH =
+  "https://api.dexscreener.com/latest/dex/search?q=";
+
+const API_TOKEN =
+  "https://api.dexscreener.com/token-pairs/v1/" +
+  CHAIN_ID + "/";
+
+const REFRESH_INTERVAL = 15000;
+const SEARCH_DEBOUNCE = 600;
+
+const tokenSearch = document.getElementById("tokenSearch");
+const tokenRows = document.getElementById("tokenRows");
+const trackerStatus = document.getElementById("trackerStatus");
+const countdown = document.getElementById("countdown");
+const searchForm = document.getElementById("searchForm");
+
+let currentQuery = DEFAULT_TOKEN_ADDRESS;
+let refreshTimer = null;
+let countdownTimer = null;
+let searchTimer = null;
+let activeController = null;
+let requestNumber = 0;
+let secondsRemaining = REFRESH_INTERVAL / 1000;
+let isSearching = false;
+
+document.getElementById("year").textContent =
+  new Date().getFullYear();
+
+function toggleMenu(){
+  document.getElementById("navLinks").classList.toggle("open");
+}
+
+document.querySelectorAll(".nav-links a").forEach(link=>{
+  link.addEventListener("click",()=>{
+    document.getElementById("navLinks").classList.remove("open");
+  });
+});
+
+function escapeHTML(value){
+  return String(value ?? "").replace(/[&<>"']/g,char=>({
+    "&":"&amp;",
+    "<":"&lt;",
+    ">":"&gt;",
+    '"':"&quot;",
+    "'":"&#039;"
+  })[char]);
+}
+
+function formatUSD(value){
+  const number = Number(value);
+  if(!Number.isFinite(number)) return "N/A";
+
+  if(number === 0) return "$0";
+
+  if(number < 0.000001){
+    return "$" + number.toExponential(2);
+  }
+
+  return "$" + number.toLocaleString("en-US",{
+    maximumFractionDigits:8
+  });
+}
+
+function formatCompactUSD(value){
+  const number = Number(value);
+
+  if(!Number.isFinite(number)) return "N/A";
+
+  return new Intl.NumberFormat("en-US",{
+    style:"currency",
+    currency:"USD",
+    notation:"compact",
+    maximumFractionDigits:2
+  }).format(number);
+}
+
+function isContractAddress(value){
+  return /^0x[a-fA-F0-9]{40}$/.test(value.trim());
+}
+
+function setStatus(message,error=false){
+  trackerStatus.textContent = message;
+  trackerStatus.classList.toggle("error",error);
+}
+
+function getTokenFromPair(pair,query){
+  const base = pair.baseToken || {};
+  const quote = pair.quoteToken || {};
+
+  const q = query.toLowerCase();
+
+  const baseMatch =
+    String(base.address || "").toLowerCase() === q ||
+    String(base.name || "").toLowerCase() === q ||
+    String(base.symbol || "").toLowerCase() === q;
+
+  const quoteMatch =
+    String(quote.address || "").toLowerCase() === q ||
+    String(quote.name || "").toLowerCase() === q ||
+    String(quote.symbol || "").toLowerCase() === q;
+
+  if(baseMatch) return base;
+  if(quoteMatch) return quote;
+
+  return base;
+}
+
+function getMatchingToken(pair,query){
+  const base = pair.baseToken || {};
+  const quote = pair.quoteToken || {};
+
+  const q = query.toLowerCase();
+
+  return (
+    String(base.address || "").toLowerCase() === q ||
+    String(quote.address || "").toLowerCase() === q ||
+    String(base.name || "").toLowerCase() === q ||
+    String(quote.name || "").toLowerCase() === q ||
+    String(base.symbol || "").toLowerCase() === q ||
+    String(quote.symbol || "").toLowerCase() === q
+  );
+}
+
+function sortPairs(pairs){
+  return [...pairs].sort((a,b)=>{
+    const aLiquidity = Number(a.liquidity?.usd || 0);
+    const bLiquidity = Number(b.liquidity?.usd || 0);
+    return bLiquidity - aLiquidity;
+  });
+}
+
+function getRobinhoodPairs(data){
+  if(!Array.isArray(data)) return [];
+
+  return data.filter(pair=>{
+    const chain = String(pair.chainId || "").toLowerCase();
+    return chain === CHAIN_ID;
+  });
+}
+
+function renderPairs(pairs,query){
+  if(!pairs.length){
+    tokenRows.innerHTML =
+      '<tr><td colspan="7" class="empty">No matching tokens found on Robinhood Chain.</td></tr>';
+    return;
+  }
+
+  const sorted = sortPairs(pairs);
+
+  tokenRows.innerHTML = sorted.map(pair=>{
+    const token = getTokenFromPair(pair,query);
+    const price = pair.priceUsd;
+    const change = Number(pair.priceChange?.h24 || 0);
+    const marketCap = pair.marketCap ?? pair.fdv;
+    const volume = pair.volume?.h24;
+    const liquidity = pair.liquidity?.usd;
+
+    const changeClass = change >= 0 ? "positive" : "negative";
+    const changeSign = change > 0 ? "+" : "";
+
+    const dexUrl = pair.url || "#";
+    const tokenName = escapeHTML(token.name || "Unknown Token");
+    const tokenSymbol = escapeHTML(token.symbol || "TOKEN");
+    const pairName =
+      escapeHTML(pair.baseToken?.symbol || "?") +
+      " / " +
+      escapeHTML(pair.quoteToken?.symbol || "?");
+
+    return `
+      <tr>
+        <td>
+          <div class="token-name">${tokenName}</div>
+          <div class="token-symbol">${tokenSymbol} · ${pairName}</div>
+        </td>
+        <td>${formatUSD(price)}</td>
+        <td class="${changeClass}">
+          ${changeSign}${change.toFixed(2)}%
+        </td>
+        <td>${formatCompactUSD(marketCap)}</td>
+        <td>${formatCompactUSD(volume)}</td>
+        <td>${formatCompactUSD(liquidity)}</td>
+        <td>
+          <a class="pair-link"
+             href="${escapeHTML(dexUrl)}"
+             target="_blank"
+             rel="noopener">View ↗</a>
+        </td>
+      </tr>
+    `;
+  }).join("");
+}
+
+async function fetchTokenPairs(query,signal){
+  if(isContractAddress(query)){
+    const response = await fetch(
+      API_TOKEN + encodeURIComponent(query),
+      {signal}
+    );
+
+    if(!response.ok){
+      throw new Error("Token API request failed.");
+    }
+
+    const data = await response.json();
+
+    const pairs = getRobinhoodPairs(data);
+
+    return pairs.filter(pair=>
+      getMatchingToken(pair,query)
+    );
+  }
+
+  const response = await fetch(
+    API_SEARCH + encodeURIComponent(query),
+    {signal}
+  );
+
+  if(!response.ok){
+    throw new Error("Search API request failed.");
+  }
+
+  const data = await response.json();
+
+  const pairs = getRobinhoodPairs(data.pairs || []);
+
+  return pairs;
+}
+
+async function loadYaloTokens(query){
+  query = String(query || "").trim();
+
+  if(!query){
+    tokenRows.innerHTML =
+      
