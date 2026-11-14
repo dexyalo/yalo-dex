@@ -1,669 +1,279 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#080b14">
+<meta name="theme-color" content="#ffe500">
 <title>YALO DEX | Token Explorer</title>
-<meta name="description" content="YALO DEX - Explore Robinhood Chain tokens, charts and market data.">
-
+<meta name="description" content="YALO DEX — explore tokens and market data on Robinhood Chain.">
 <style>
-:root{
-  --bg:#080b14;
-  --panel:#101626;
-  --panel2:#151e31;
-  --text:#f5f7ff;
-  --muted:#929db4;
-  --green:#a6ff55;
-  --red:#ff6472;
-  --border:rgba(255,255,255,.09);
-}
+:root{--bg:#080808;--panel:#111;--panel2:#191919;--text:#fff;--muted:#aaa;--yellow:#ffe500;--gold:#ffb800;--border:rgba(255,229,0,.2);--red:#ff6875}
 *{box-sizing:border-box;margin:0;padding:0}
-body{
-  background:var(--bg);
-  color:var(--text);
-  font-family:Inter,Arial,sans-serif;
-  line-height:1.6;
-}
-a{color:inherit;text-decoration:none}
-button,input{font:inherit}
-.container{width:min(1160px,92%);margin:auto}
-header{
-  position:sticky;top:0;z-index:20;
-  background:rgba(8,11,20,.95);
-  border-bottom:1px solid var(--border);
-  backdrop-filter:blur(14px);
-}
-.nav{
-  min-height:75px;display:flex;align-items:center;
-  justify-content:space-between;gap:20px;
-}
-.logo{font-size:27px;font-weight:900;letter-spacing:-1px}
-.logo span{color:var(--green)}
-.navlinks{display:flex;gap:23px;align-items:center}
-.navlinks a{font-size:13px;color:var(--muted);font-weight:700}
-.navlinks a:hover{color:var(--green)}
-.navbtn{
-  display:none;background:none;color:white;
-  border:1px solid var(--border);padding:8px 12px;
-  border-radius:8px;
-}
-.hero{text-align:center;padding:80px 0 50px}
-.tag{
-  display:inline-block;color:var(--green);
-  border:1px solid rgba(166,255,85,.25);
-  border-radius:30px;padding:6px 13px;
-  font-size:11px;font-weight:800;margin-bottom:20px;
-}
-.hero h1{
-  font-size:clamp(38px,7vw,70px);
-  line-height:1.1;letter-spacing:-3px;
-}
-.hero h1 span{color:var(--green)}
-.hero p{
-  color:var(--muted);max-width:600px;
-  margin:17px auto 25px;font-size:14px;
-}
-.btn{
-  background:var(--green);color:#11190b;
-  padding:12px 19px;border:0;border-radius:9px;
-  font-weight:800;cursor:pointer;display:inline-block;
-}
-.btn-outline{
-  border:1px solid var(--border);padding:11px 18px;
-  border-radius:9px;font-weight:700;
-}
-section{padding:55px 0}
-.section-title{text-align:center;margin-bottom:28px}
-.section-title h2{font-size:32px;letter-spacing:-1px}
-.section-title p{color:var(--muted);font-size:13px;margin-top:6px}
-.panel{
-  background:var(--panel);
-  border:1px solid var(--border);
-  border-radius:17px;padding:22px;
-}
-.searchbox{
-  display:flex;gap:10px;max-width:800px;margin:25px auto 12px;
-}
-.searchbox input{
-  flex:1;min-width:0;background:#0b1120;
-  color:white;border:1px solid var(--border);
-  border-radius:10px;padding:15px;outline:none;
-}
-.searchbox input:focus{border-color:var(--green)}
-.searchbox button{
-  background:var(--green);border:0;border-radius:10px;
-  padding:0 22px;font-weight:900;cursor:pointer;
-}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:Inter,Arial,sans-serif;line-height:1.6}
+a{color:inherit;text-decoration:none}button,input{font:inherit}.container{width:min(1160px,92%);margin:auto}
+header{position:sticky;top:0;z-index:20;background:rgba(8,8,8,.96);border-bottom:1px solid var(--border);backdrop-filter:blur(14px)}
+.nav{min-height:76px;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.logo{font-size:29px;font-weight:950;letter-spacing:-1.5px}.logo span{color:var(--yellow)}
+.navlinks{display:flex;gap:23px;align-items:center}.navlinks a{font-size:13px;color:var(--muted);font-weight:800}.navlinks a:hover{color:var(--yellow)}
+.navbtn{display:none;background:transparent;color:var(--yellow);border:1px solid var(--border);padding:8px 12px;border-radius:8px}
+.hero{position:relative;overflow:hidden;text-align:center;padding:105px 0 90px;background:radial-gradient(ellipse at 50% 0%,rgba(255,229,0,.2),transparent 60%),linear-gradient(135deg,#080808 0%,#171300 50%,#080808 100%);border-bottom:1px solid var(--border)}
+.hero:before,.hero:after{content:"";position:absolute;width:340px;height:340px;border:1px solid rgba(255,229,0,.13);transform:rotate(45deg);pointer-events:none}.hero:before{left:-220px;top:20px}.hero:after{right:-220px;bottom:-220px}
+.tag{display:inline-block;color:#080808;background:var(--yellow);border-radius:30px;padding:6px 14px;font-size:11px;font-weight:950;margin-bottom:20px}
+.hero h1{font-size:clamp(40px,7vw,76px);line-height:1.05;letter-spacing:-3px;font-weight:950}.hero h1 span{color:var(--yellow)}
+.hero p{color:#c2c2c2;max-width:640px;margin:20px auto 27px;font-size:15px}
+.btn{background:var(--yellow);color:#050505;padding:13px 20px;border:0;border-radius:9px;font-weight:950;cursor:pointer;display:inline-block}.btn:hover{background:#fff06a}
+section{padding:65px 0}.section-title{text-align:center;margin-bottom:30px}.section-title h2{font-size:clamp(28px,4vw,38px);letter-spacing:-1.3px}.section-title p{color:var(--muted);font-size:13px;margin-top:7px}
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:17px;padding:22px}
+.searchbox{display:flex;gap:10px;max-width:850px;margin:25px auto 12px}.searchbox input{flex:1;min-width:0;background:#111;color:#fff;border:1px solid #383300;border-radius:10px;padding:16px;outline:none}.searchbox input:focus{border-color:var(--yellow);box-shadow:0 0 0 3px rgba(255,229,0,.1)}.searchbox button{background:var(--yellow);color:#080808;border:0;border-radius:10px;padding:0 25px;font-weight:950;cursor:pointer}
 .small-note{text-align:center;color:var(--muted);font-size:11px}
-.status{
-  background:#0b1220;border-radius:9px;
-  padding:12px 14px;color:var(--muted);
-  font-size:12px;margin:18px 0;
-}
-.status.error{color:var(--red)}
-.results{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
-.result-card{
-  display:flex;align-items:center;gap:12px;
-  background:#0b1220;border:1px solid var(--border);
-  padding:14px;border-radius:12px;
-}
-.result-card:hover{border-color:var(--green)}
-.token-logo{
-  width:48px;height:48px;border-radius:50%;
-  background:#202a3c;display:flex;align-items:center;
-  justify-content:center;overflow:hidden;flex-shrink:0;
-  font-weight:900;color:var(--green);
-}
-.token-logo img{width:100%;height:100%;object-fit:cover}
-.result-info{flex:1;min-width:0}
-.result-info strong{display:block;overflow-wrap:anywhere}
-.result-info small{color:var(--muted);font-size:11px}
-.result-card button{
-  border:1px solid var(--green);color:var(--green);
-  background:transparent;padding:8px 11px;
-  border-radius:8px;font-weight:800;cursor:pointer;
-}
+.status{background:#151515;border:1px solid rgba(255,229,0,.1);border-radius:9px;padding:12px 14px;color:#c4c4c4;font-size:12px;margin:18px 0}.status.error{color:#ff8c96;border-color:rgba(255,104,117,.3)}
+.results{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.result-card{display:flex;align-items:center;gap:12px;background:#111;border:1px solid #292400;padding:14px;border-radius:12px}.result-card:hover{border-color:var(--yellow)}
+.token-logo{width:48px;height:48px;border-radius:50%;background:#282300;display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;font-weight:950;color:var(--yellow)}.token-logo img{width:100%;height:100%;object-fit:cover}
+.result-info{flex:1;min-width:0}.result-info strong{display:block;overflow-wrap:anywhere}.result-info small{color:var(--muted);font-size:11px}
+.result-card button{border:1px solid var(--yellow);color:var(--yellow);background:transparent;padding:8px 11px;border-radius:8px;font-weight:850;cursor:pointer}
 .hidden{display:none!important}
-.detail-head{
-  display:flex;align-items:center;gap:15px;
-  flex-wrap:wrap;margin-bottom:22px;
-}
-.detail-head .token-logo{width:65px;height:65px;font-size:22px}
-.detail-name{flex:1;min-width:180px}
-.detail-name h2{font-size:25px;line-height:1.2}
-.detail-name p{color:var(--muted);font-size:12px}
-.verified{
-  color:var(--green);font-size:11px;
-  border:1px solid rgba(166,255,85,.3);
-  padding:5px 9px;border-radius:20px;
-}
-.price-area{margin:20px 0}
-.price{
-  font-size:clamp(28px,5vw,43px);
-  font-weight:900;letter-spacing:-1px;
-}
-.change{font-size:13px;font-weight:800}
-.green{color:var(--green)}
-.red{color:var(--red)}
-.metrics{
-  display:grid;grid-template-columns:repeat(3,1fr);gap:12px;
-  margin:22px 0;
-}
-.metric{
-  background:#0b1220;border:1px solid var(--border);
-  border-radius:11px;padding:15px;
-}
-.metric span{display:block;color:var(--muted);font-size:11px}
-.metric strong{display:block;font-size:16px;margin-top:5px;overflow-wrap:anywhere}
-.detail-actions{display:flex;gap:9px;flex-wrap:wrap;margin:18px 0}
-.action{
-  background:#172239;border:1px solid var(--border);
-  color:white;border-radius:8px;padding:10px 13px;
-  font-size:12px;font-weight:700;cursor:pointer;
-}
-.action:hover{border-color:var(--green)}
-.contract{
-  background:#0b1220;padding:14px;border-radius:10px;
-  margin:18px 0;overflow-wrap:anywhere;
-}
-.contract label{display:block;color:var(--muted);font-size:11px;margin-bottom:6px}
-.contract-row{display:flex;gap:10px;align-items:center;justify-content:space-between}
-.contract-row code{font-size:11px;overflow-wrap:anywhere}
-.contract-row button{
-  border:1px solid var(--border);background:#172239;
-  color:white;padding:8px;border-radius:7px;cursor:pointer;
-}
-.chart-title{font-size:17px;margin:24px 0 12px}
-.chart-frame{
-  width:100%;height:420px;border:0;
-  border-radius:12px;background:#0b1220;
-}
-.pair-table{width:100%;border-collapse:collapse;min-width:600px}
-.pair-table th,.pair-table td{
-  text-align:left;padding:13px 10px;
-  border-bottom:1px solid var(--border);font-size:12px;
-}
-.pair-table th{color:var(--muted);font-size:10px}
-.table-scroll{overflow-x:auto}
-.section-card{margin-top:17px}
-.tx-row{
-  display:flex;justify-content:space-between;
-  gap:12px;padding:13px 0;
-  border-bottom:1px solid var(--border);font-size:12px;
-}
-.tx-row:last-child{border:0}
-.tx-row small{color:var(--muted)}
-.features{
-  display:grid;grid-template-columns:repeat(3,1fr);gap:13px;
-}
-.feature{
-  background:var(--panel);border:1px solid var(--border);
-  border-radius:13px;padding:20px;
-}
-.feature h3{font-size:15px;margin-bottom:6px}
-.feature p{font-size:12px;color:var(--muted)}
-.ecosystem{
-  display:grid;grid-template-columns:repeat(2,1fr);gap:13px;
-}
-.eco{
-  background:var(--panel);border:1px solid var(--border);
-  border-radius:13px;padding:20px;
-}
-.eco p{color:var(--muted);font-size:12px}
-.eco small{color:var(--green);display:block;margin-top:10px}
-.community{text-align:center}
-.community p{color:var(--muted);font-size:13px;margin:12px auto 20px}
-.socials{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
-.socials a{
-  border:1px solid var(--border);padding:10px 15px;
-  border-radius:8px;font-size:12px;font-weight:700;
-}
-footer{
-  border-top:1px solid var(--border);
-  padding:27px 0;color:var(--muted);font-size:12px;
-}
-.footer-inner{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
-@media(max-width:760px){
-  .navlinks{
-    display:none;position:absolute;top:75px;left:0;
-    width:100%;padding:20px;background:#0c1220;
-    flex-direction:column;align-items:flex-start;
-  }
-  .navlinks.open{display:flex}
-  .navbtn{display:block}
-  .results{grid-template-columns:1fr}
-  .features{grid-template-columns:repeat(2,1fr)}
-}
-@media(max-width:520px){
-  .metrics{grid-template-columns:repeat(2,1fr)}
-  .features,.ecosystem{grid-template-columns:1fr}
-  .searchbox{flex-wrap:wrap}
-  .searchbox button{width:100%;padding:13px}
-  .chart-frame{height:350px}
-  .panel{padding:15px}
-}
+.detail-head{display:flex;align-items:center;gap:15px;flex-wrap:wrap;margin-bottom:22px}.detail-head .token-logo{width:65px;height:65px;font-size:22px}.detail-name{flex:1;min-width:180px}.detail-name h2{font-size:25px;line-height:1.2}.detail-name p{color:var(--muted);font-size:12px}
+.verified{color:var(--yellow);font-size:11px;border:1px solid var(--border);padding:5px 9px;border-radius:20px}
+.price-area{margin:20px 0}.price{font-size:clamp(28px,5vw,43px);font-weight:950;letter-spacing:-1px}.change{font-size:13px;font-weight:850}.green{color:#a8ff60}.red{color:var(--red)}
+.metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:22px 0}.metric{background:#0b0b0b;border:1px solid #292400;border-radius:11px;padding:15px}.metric span{display:block;color:var(--muted);font-size:11px}.metric strong{display:block;font-size:16px;margin-top:5px;overflow-wrap:anywhere}
+.detail-actions{display:flex;gap:9px;flex-wrap:wrap;margin:18px 0}.action{background:#1b1b1b;border:1px solid #383000;color:white;border-radius:8px;padding:10px 13px;font-size:12px;font-weight:750;cursor:pointer}.action:hover{border-color:var(--yellow)}
+.contract{background:#0b0b0b;border:1px solid #292400;padding:14px;border-radius:10px;margin:18px 0;overflow-wrap:anywhere}.contract label{display:block;color:var(--muted);font-size:11px;margin-bottom:6px}.contract-row{display:flex;gap:10px;align-items:center;justify-content:space-between}.contract-row code{font-size:11px;overflow-wrap:anywhere}.contract-row button{border:1px solid #383000;background:#1b1b1b;color:var(--yellow);padding:8px;border-radius:7px;cursor:pointer}
+.chart-title{font-size:17px;margin:24px 0 12px}.chart-frame{width:100%;height:420px;border:1px solid #292400;border-radius:12px;background:#0b0b0b}.pair-table{width:100%;border-collapse:collapse;min-width:600px}.pair-table th,.pair-table td{text-align:left;padding:13px 10px;border-bottom:1px solid #292400;font-size:12px}.pair-table th{color:var(--muted);font-size:10px}.table-scroll{overflow-x:auto}.section-card{margin-top:17px}
+.tx-row{display:flex;justify-content:space-between;gap:12px;padding:13px 0;border-bottom:1px solid #292400;font-size:12px}.tx-row:last-child{border:0}.tx-row small{color:var(--muted)}
+.features{display:grid;grid-template-columns:repeat(3,1fr);gap:13px}.feature,.eco{background:linear-gradient(145deg,#151515,#0e0e0e);border:1px solid #302900;border-radius:13px;padding:20px}.feature h3{font-size:15px;margin-bottom:6px}.feature p,.eco p{font-size:12px;color:var(--muted)}.ecosystem{display:grid;grid-template-columns:repeat(2,1fr);gap:13px}.eco small{color:var(--yellow);display:block;margin-top:10px;font-weight:850}
+.community{text-align:center}.community p{color:var(--muted);font-size:13px;margin:12px auto 20px}.socials{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}.socials a{border:1px solid #383000;padding:10px 15px;border-radius:8px;font-size:12px;font-weight:800}.socials a:hover{border-color:var(--yellow);color:var(--yellow)}
+footer{border-top:1px solid var(--border);padding:27px 0;color:var(--muted);font-size:12px}.footer-inner{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}.footer-inner strong{color:#fff}
+@media(max-width:760px){.navlinks{display:none;position:absolute;top:75px;left:0;width:100%;padding:20px;background:#0c0c0c;border-bottom:1px solid var(--border);flex-direction:column;align-items:flex-start}.navlinks.open{display:flex}.navbtn{display:block}.results{grid-template-columns:1fr}.features{grid-template-columns:repeat(2,1fr)}.hero{padding:80px 0 70px}}
+@media(max-width:520px){.metrics{grid-template-columns:repeat(2,1fr)}.features,.ecosystem{grid-template-columns:1fr}.searchbox{flex-wrap:wrap}.searchbox button{width:100%;padding:14px}.chart-frame{height:350px}.panel{padding:15px}.contract-row{align-items:flex-start}.contract-row code{word-break:break-all}}
 </style>
 </head>
-
 <body>
+<header><div class="container nav">
+<a class="logo" href="#home">YALO<span>.</span></a>
+<nav class="navlinks" id="navlinks">
+<a href="#home">Home</a><a href="#explorer">Token Explorer</a><a href="#features">Features</a><a href="#ecosystem">Ecosystem</a><a href="#community">Community</a>
+</nav><button class="navbtn" id="menuButton" type="button" aria-label="Open menu">☰</button>
+</div></header>
 
-<header>
-  <div class="container nav">
-    <a class="logo" href="#home">YALO<span>.</span></a>
+<section class="hero" id="home"><div class="container">
+<div class="tag">THE YALO WEB3 ECOSYSTEM</div>
+<h1>Trade Smarter.<br><span>Think Beyond.</span></h1>
+<p>Explore tokens, discover market data and follow your favorite assets on Robinhood Chain with YALO DEX.</p>
+<a href="#explorer" class="btn">Explore Tokens</a>
+</div></section>
 
-    <nav class="navlinks" id="navlinks">
-      <a href="#home">Home</a>
-      <a href="#explorer">Token Explorer</a>
-      <a href="#features">Features</a>
-      <a href="#ecosystem">Ecosystem</a>
-      <a href="#community">Community</a>
-    </nav>
+<section id="explorer"><div class="container">
+<div class="section-title"><h2>Token Explorer</h2><p>Search a token by name, symbol or contract address.</p></div>
+<form class="searchbox" id="searchForm">
+<input id="searchInput" placeholder="Search token name, symbol or contract address..." autocomplete="off">
+<button type="submit">Search</button>
+</form>
+<p class="small-note">Search results are loaded from market data providers. Select a result to open its details.</p>
+<div class="status" id="status" role="status" aria-live="polite">Ready. Search for a token to begin.</div>
+<div id="results" class="results"></div>
 
-    <button class="navbtn" onclick="toggleMenu()">☰</button>
-  </div>
-</header>
+<div id="details" class="panel hidden">
+<div class="detail-head">
+<div class="token-logo" id="detailLogo">Y</div>
+<div class="detail-name"><h2 id="detailName">Token</h2><p id="detailSymbol">TOKEN · Robinhood Chain</p></div>
+<span class="verified">● TOKEN DATA</span>
+</div>
+<div class="price-area"><div class="price" id="detailPrice">--</div><div class="change" id="detailChange">24H: --</div></div>
+<div class="metrics">
+<div class="metric"><span>Market Cap</span><strong id="marketCap">--</strong></div>
+<div class="metric"><span>FDV</span><strong id="fdv">--</strong></div>
+<div class="metric"><span>24H Volume</span><strong id="volume">--</strong></div>
+<div class="metric"><span>Liquidity</span><strong id="liquidity">--</strong></div>
+<div class="metric"><span>Holders</span><strong id="holders">Not supplied</strong></div>
+<div class="metric"><span>Total Supply</span><strong id="supply">--</strong></div>
+<div class="metric"><span>24H Buys</span><strong id="buys">--</strong></div>
+<div class="metric"><span>24H Sells</span><strong id="sells">--</strong></div>
+<div class="metric"><span>DEX</span><strong id="dexName">--</strong></div>
+</div>
+<div class="contract"><label>Token Contract Address</label><div class="contract-row"><code id="contractAddress">--</code><button type="button" id="copyButton">Copy</button></div></div>
+<div class="detail-actions">
+<a id="explorerLink" class="action" target="_blank" rel="noopener">Blockscout Explorer ↗</a>
+<a id="dexLink" class="action" target="_blank" rel="noopener">View DEX Pair ↗</a>
+<button class="action" type="button" id="backButton">Back to results</button>
+</div>
+<h3 class="chart-title">Price Chart</h3>
+<iframe id="chartFrame" class="chart-frame" title="Token price chart" loading="lazy" referrerpolicy="no-referrer"></iframe>
+<div class="section-card"><h3 class="chart-title">Trading Pairs</h3><div class="table-scroll"><table class="pair-table"><thead><tr><th>PAIR</th><th>DEX</th><th>PRICE</th><th>LIQUIDITY</th><th>24H VOLUME</th><th>OPEN</th></tr></thead><tbody id="pairRows"></tbody></table></div></div>
+<div class="section-card"><h3 class="chart-title">Recent Transactions</h3><div id="transactions"><div class="status">Transaction history is not available from this market-data feed.</div></div></div>
+</div>
+</div></section>
 
-<section class="hero" id="home">
-  <div class="container">
-    <div class="tag">THE YALO WEB3 ECOSYSTEM</div>
-    <h1>Trade Smarter.<br><span>Think Beyond.</span></h1>
-    <p>
-      Explore tokens, discover market data and follow
-      your favorite assets on Robinhood Chain with YALO DEX.
-    </p>
-    <a href="#explorer" class="btn">Explore Tokens</a>
-  </div>
-</section>
+<section id="features"><div class="container">
+<div class="section-title"><h2>YALO Features</h2><p>Tools being developed for the YALO ecosystem.</p></div>
+<div class="features">
+<div class="feature"><h3>📊 Dashboard</h3><p>Monitor crypto activity.</p></div><div class="feature"><h3>🔄 Token Swap</h3><p>Explore decentralized swapping.</p></div><div class="feature"><h3>💳 Buy Crypto</h3><p>Explore crypto purchase options.</p></div><div class="feature"><h3>🔐 Staking</h3><p>Discover staking opportunities.</p></div><div class="feature"><h3>💼 Portfolio</h3><p>Track your digital assets.</p></div><div class="feature"><h3>👛 Wallet</h3><p>Connect supported Web3 wallets.</p></div>
+</div></div></section>
 
-<section id="explorer">
-  <div class="container">
-    <div class="section-title">
-      <h2>Token Explorer</h2>
-      <p>Search a token and open its complete details.</p>
-    </div>
+<section id="ecosystem"><div class="container">
+<div class="section-title"><h2>The YALO Ecosystem</h2><p>One vision. Multiple products.</p></div>
+<div class="ecosystem">
+<div class="eco"><h3>YALO DEX</h3><p>Decentralized trading and token discovery.</p><small>● BUILDING</small></div>
+<div class="eco"><h3>YALO Wallet</h3><p>A wallet experience for the ecosystem.</p><small>● PLANNED</small></div>
+<div class="eco"><h3>YALO PAY</h3><p>Digital payment product.</p><small>● PLANNED</small></div>
+<div class="eco"><h3>YALO Token Ecosystem</h3><p>Follow official announcements.</p><small>● UPDATES COMING</small></div>
+</div></div></section>
 
-    <form class="searchbox" id="searchForm">
-      <input id="searchInput"
-        placeholder="Search token name, symbol or contract address..."
-        autocomplete="off">
-      <button type="submit">Search</button>
-    </form>
-
-    <p class="small-note">
-      Automatic search is enabled. Select a result to open its full page.
-    </p>
-
-    <div class="status" id="status">
-      Loading YALO Token Explorer...
-    </div>
-
-    <div id="results" class="results"></div>
-
-    <div id="details" class="panel hidden">
-      <div class="detail-head">
-        <div class="token-logo" id="detailLogo">Y</div>
-        <div class="detail-name">
-          <h2 id="detailName">Token</h2>
-          <p id="detailSymbol">TOKEN · Robinhood Chain</p>
-        </div>
-        <span class="verified">● CONTRACT</span>
-      </div>
-
-      <div class="price-area">
-        <div class="price" id="detailPrice">Loading...</div>
-        <div class="change" id="detailChange">--</div>
-      </div>
-
-      <div class="metrics">
-        <div class="metric"><span>Market Cap</span><strong id="marketCap">--</strong></div>
-        <div class="metric"><span>FDV</span><strong id="fdv">--</strong></div>
-        <div class="metric"><span>24H Volume</span><strong id="volume">--</strong></div>
-        <div class="metric"><span>Liquidity</span><strong id="liquidity">--</strong></div>
-        <div class="metric"><span>Holders</span><strong id="holders">--</strong></div>
-        <div class="metric"><span>Total Supply</span><strong id="supply">--</strong></div>
-        <div class="metric"><span>24H Buys</span><strong id="buys">--</strong></div>
-        <div class="metric"><span>24H Sells</span><strong id="sells">--</strong></div>
-        <div class="metric"><span>DEX</span><strong id="dexName">--</strong></div>
-      </div>
-
-      <div class="contract">
-        <label>Token Contract Address</label>
-        <div class="contract-row">
-          <code id="contractAddress">--</code>
-          <button onclick="copyContract()">Copy</button>
-        </div>
-      </div>
-
-      <div class="detail-actions">
-        <a id="explorerLink" class="action" target="_blank" rel="noopener">Blockscout Explorer ↗</a>
-        <a id="dexLink" class="action" target="_blank" rel="noopener">View DEX Pair ↗</a>
-        <button class="action" onclick="backToResults()">Back to results</button>
-      </div>
-
-      <h3 class="chart-title">Price Chart</h3>
-      <iframe id="chartFrame" class="chart-frame"
-        title="Token price chart"
-        loading="lazy"
-        referrerpolicy="no-referrer"></iframe>
-
-      <div class="section-card">
-        <h3 class="chart-title">Trading Pairs</h3>
-        <div class="table-scroll">
-          <table class="pair-table">
-            <thead>
-              <tr>
-                <th>PAIR</th><th>DEX</th><th>PRICE</th>
-                <th>LIQUIDITY</th><th>24H VOLUME</th><th>OPEN</th>
-              </tr>
-            </thead>
-            <tbody id="pairRows">
-              <tr><td colspan="6">Loading pairs...</td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <div class="section-card">
-        <h3 class="chart-title">Recent Transactions</h3>
-        <div id="transactions">
-          <div class="status">Loading transaction history...</div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section id="features">
-  <div class="container">
-    <div class="section-title">
-      <h2>YALO Features</h2>
-      <p>Tools being developed for the YALO ecosystem.</p>
-    </div>
-    <div class="features">
-      <div class="feature"><h3>📊 Dashboard</h3><p>Monitor crypto activity.</p></div>
-      <div class="feature"><h3>🔄 Token Swap</h3><p>Explore decentralized swapping.</p></div>
-      <div class="feature"><h3>💳 Buy Crypto</h3><p>Explore crypto purchase options.</p></div>
-      <div class="feature"><h3>🔐 Staking</h3><p>Discover staking opportunities.</p></div>
-      <div class="feature"><h3>💼 Portfolio</h3><p>Track your digital assets.</p></div>
-      <div class="feature"><h3>👛 Wallet</h3><p>Connect supported Web3 wallets.</p></div>
-    </div>
-  </div>
-</section>
-
-<section id="ecosystem">
-  <div class="container">
-    <div class="section-title">
-      <h2>The YALO Ecosystem</h2>
-      <p>One vision. Multiple products.</p>
-    </div>
-    <div class="ecosystem">
-      <div class="eco"><h3>YALO DEX</h3><p>Decentralized trading and token discovery.</p><small>● BUILDING</small></div>
-      <div class="eco"><h3>YALO Wallet</h3><p>A wallet experience for the ecosystem.</p><small>● PLANNED</small></div>
-      <div class="eco"><h3>YALO PAY</h3><p>Digital payment product.</p><small>● PLANNED</small></div>
-      <div class="eco"><h3>YALO Token Ecosystem</h3><p>Follow official announcements.</p><small>● UPDATES COMING</small></div>
-    </div>
-  </div>
-</section>
-
-<section id="community">
-  <div class="container community">
-    <div class="section-title"><h2>Join the YALO Community</h2></div>
-    <p>Follow our official channels for product updates and announcements.</p>
-    <div class="socials">
-      <a href="https://t.me/yalo0x" target="_blank" rel="noopener">Telegram</a>
-      <a href="https://x.com/0xYalo" target="_blank" rel="noopener">X / Twitter</a>
-      <a href="https://www.facebook.com/profile.php?id=61596664225595" target="_blank" rel="noopener">Facebook</a>
-      <a href="mailto:modcrypto@0xyalo.xyz">Email</a>
-    </div>
-  </div>
-</section>
-
-<footer>
-  <div class="container footer-inner">
-    <strong>YALO. © <span id="year"></span></strong>
-    <span>Built for the decentralized future.</span>
-  </div>
-</footer>
+<section id="community"><div class="container community">
+<div class="section-title"><h2>Join the YALO Community</h2></div><p>Follow our official channels for product updates and announcements.</p>
+<div class="socials">
+<a href="https://t.me/yalo0x" target="_blank" rel="noopener">Telegram</a>
+<a href="https://x.com/0xYalo" target="_blank" rel="noopener">X / Twitter</a>
+<a href="https://www.facebook.com/profile.php?id=61596664225595" target="_blank" rel="noopener">Facebook</a>
+<a href="mailto:modcrypto@0xyalo.xyz">Email</a>
+</div></div></section>
+<footer><div class="container footer-inner"><strong>YALO. © <span id="year"></span></strong><span>Built for the decentralized future.</span></div></footer>
 
 <script>
-const DEFAULT_ADDRESS =
-"0x18E674231A58c239Dc7DaeDcffE15Ec3A24cff5c";
+"use strict";
+const DEX_SEARCH_URL = "https://api.dexscreener.com/latest/dex/search?q=";
+const DEX_TOKEN_URL = "https://api.dexscreener.com/token-pairs/v1/robinhood/";
+const EXPLORER_URL = "https://robinhoodchain.blockscout.com";
+const CHAIN_ID = "robinhood";
 
-const DEX_SEARCH =
-"https://api.dexscreener.com/latest/dex/search?q=";
-
-const DEX_TOKEN =
-"https://api.dexscreener.com/token-pairs/v1/robinhood/";
-
-const EXPLORER =
-"https://robinhoodchain.blockscout.com";
-
-const EXPLORER_API =
-EXPLORER + "/api/v2";
-
-const CHAIN = "robinhood";
-
-let searchTimeout = null;
-let refreshTimer = null;
-let activeController = null;
-let currentAddress = "";
-let currentPairs = [];
-let selectedPair = null;
+let searchController = null;
+let searchTimer = null;
 let searchResults = [];
-let requestId = 0;
+let selectedTokenAddress = "";
+let selectedPairs = [];
+let detailController = null;
 
-document.getElementById("year").textContent =
-new Date().getFullYear();
+const $ = id => document.getElementById(id);
+$("year").textContent = new Date().getFullYear();
 
-function toggleMenu(){
-  document.getElementById("navlinks").classList.toggle("open");
-}
-
-document.querySelectorAll(".navlinks a").forEach(a=>{
-  a.addEventListener("click",()=>{
-    document.getElementById("navlinks").classList.remove("open");
-  });
+$("menuButton").addEventListener("click", () => $("navlinks").classList.toggle("open"));
+document.querySelectorAll(".navlinks a").forEach(link => link.addEventListener("click", () => $("navlinks").classList.remove("open")));
+$("searchForm").addEventListener("submit", event => {
+  event.preventDefault();
+  clearTimeout(searchTimer);
+  searchTokens($("searchInput").value);
 });
+$("searchInput").addEventListener("input", () => {
+  clearTimeout(searchTimer);
+  const value = $("searchInput").value.trim();
+  if (!value) {
+    setStatus("Ready. Search for a token to begin.");
+    $("results").innerHTML = "";
+    return;
+  }
+  searchTimer = setTimeout(() => searchTokens(value), 500);
+});
+$("copyButton").addEventListener("click", copyContract);
+$("backButton").addEventListener("click", backToResults);
 
-function el(id){
-  return document.getElementById(id);
+function setStatus(message, isError = false) {
+  $("status").textContent = message;
+  $("status").classList.toggle("error", isError);
 }
-
-function safe(value){
-  return String(value ?? "").replace(/[&<>"']/g,c=>({
-    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
-  })[c]);
-}
-
-function shortAddress(address){
-  if(!address) return "--";
-  return address.slice(0,8)+"..."+address.slice(-6);
-}
-
-function number(value){
-  const n = Number(value);
-  return Number.isFinite(n) ? n : 0;
-}
-
-function money(value){
-  const n = Number(value);
-  if(!Number.isFinite(n)) return "--";
-  if(n===0) return "$0";
-  if(n<0.000001) return "$"+n.toExponential(3);
-  return "$"+n.toLocaleString("en-US",{maximumFractionDigits:8});
-}
-
-function compact(value){
-  const n = Number(value);
-  if(!Number.isFinite(n)) return "--";
-  return new Intl.NumberFormat("en-US",{
-    notation:"compact",maximumFractionDigits:2
-  }).format(n);
-}
-
-function setStatus(message,error=false){
-  el("status").textContent = message;
-  el("status").classList.toggle("error",error);
-}
-
-function isAddress(value){
+function isAddress(value) {
   return /^0x[a-fA-F0-9]{40}$/.test(value.trim());
 }
-
-async function fetchJSON(url,signal){
-  const response = await fetch(url,{
-    signal,
-    headers:{"Accept":"application/json"}
-  });
-  if(!response.ok){
-    throw new Error("API request failed: "+response.status);
-  }
+function safe(value) {
+  return String(value ?? "").replace(/[&<>"']/g, char => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[char]));
+}
+function shortAddress(value) {
+  return value ? value.slice(0,8) + "..." + value.slice(-6) : "--";
+}
+function fmtMoney(value) {
+  if (value === null || value === undefined || value === "") return "--";
+  const n = Number(value);
+  if (!Number.isFinite(n)) return "--";
+  if (n !== 0 && Math.abs(n) < 0.000001) return "$" + n.toExponential(3);
+  return "$" + n.toLocaleString("en-US",{maximumFractionDigits:8});
+}
+function fmtCompact(value) {
+  if (value === null || value === undefined || value === "") return "--";
+  const n = Number(value);
+  return Number.isFinite(n) ? new Intl.NumberFormat("en-US",{notation:"compact",maximumFractionDigits:2}).format(n) : "--";
+}
+async function fetchJSON(url, signal) {
+  const response = await fetch(url,{signal,headers:{"Accept":"application/json"}});
+  if (!response.ok) throw new Error("Provider returned HTTP " + response.status);
   return response.json();
 }
-
-function uniqueTokens(pairs){
-  const found = new Map();
-
-  pairs.forEach(pair=>{
-    [pair.baseToken,pair.quoteToken].forEach(token=>{
-      if(!token || !token.address) return;
-
+function pairChainMatches(pair) {
+  return String(pair.chainId || "").toLowerCase() === CHAIN_ID;
+}
+function tokenListFromPairs(pairs) {
+  const map = new Map();
+  pairs.forEach(pair => {
+    [pair.baseToken,pair.quoteToken].forEach(token => {
+      if (!token || !token.address) return;
       const key = token.address.toLowerCase();
-
-      if(!found.has(key)){
-        found.set(key,{
-          ...token,
-          pair:pair
-        });
-      }
+      if (!map.has(key)) map.set(key,{...token,pair});
     });
   });
-
-  return [...found.values()];
+  return [...map.values()];
 }
-
-function tokenMatches(token,query){
-  const q = query.toLowerCase();
-
-  return (
-    String(token.address || "").toLowerCase() === q ||
-    String(token.name || "").toLowerCase().includes(q) ||
-    String(token.symbol || "").toLowerCase().includes(q)
-  );
-}
-
-async function getSearchPairs(query,signal){
-  if(isAddress(query)){
-    const data = await fetchJSON(
-      DEX_TOKEN+encodeURIComponent(query),
-      signal
-    );
-
-    return Array.isArray(data) ? data : [];
-  }
-
-  const data = await fetchJSON(
-    DEX_SEARCH+encodeURIComponent(query),
-    signal
-  );
-
-  return Array.isArray(data.pairs) ? data.pairs : [];
-}
-
-function renderResults(tokens){
-  const results = el("results");
-
-  if(!tokens.length){
-    results.innerHTML =
-    '<div class="status">No matching tokens found. Try the contract address.</div>';
+function renderResults(tokens) {
+  const root = $("results");
+  if (!tokens.length) {
+    root.innerHTML = '<div class="status">No matching Robinhood Chain token was found. Check the spelling or contract address.</div>';
     return;
   }
-
-  results.innerHTML = tokens.map((token,index)=>{
-    const pair = token.pair || {};
-    const image = pair.info?.imageUrl || "";
-
-    const logo = image
-      ? `<img src="${safe(image)}" alt="" onerror="this.remove()">`
-      : safe((token.symbol || "?").slice(0,1));
-
-    return `
-      <div class="result-card">
-        <div class="token-logo">${logo}</div>
-        <div class="result-info">
-          <strong>${safe(token.name || "Unknown Token")}</strong>
-          <small>${safe(token.symbol || "TOKEN")} · ${shortAddress(token.address)}</small>
-        </div>
-        <button onclick="openToken(${index})">View</button>
-      </div>
-    `;
+  root.innerHTML = tokens.map((token,index) => {
+    const logoUrl = token.pair?.info?.imageUrl;
+    const logo = logoUrl
+      ? `<img src="${safe(logoUrl)}" alt="" onerror="this.style.display='none'">`
+      : safe((token.symbol || "?").slice(0,1).toUpperCase());
+    return `<article class="result-card">
+      <div class="token-logo">${logo}</div>
+      <div class="result-info"><strong>${safe(token.name || "Unknown Token")}</strong>
+      <small>${safe(token.symbol || "TOKEN")} · ${safe(shortAddress(token.address))}</small></div>
+      <button type="button" data-token-index="${index}">View</button>
+    </article>`;
   }).join("");
+  root.querySelectorAll("[data-token-index]").forEach(button => {
+    button.addEventListener("click", () => openToken(Number(button.dataset.tokenIndex)));
+  });
 }
-
-async function searchTokens(query){
-  query = query.trim();
-
-  if(!query){
-    setStatus("Enter a token name, symbol or contract address.");
-    return;
-  }
-
-  if(activeController) activeController.abort();
-
-  activeController = new AbortController();
-  const signal = activeController.signal;
-  const thisId = ++requestId;
-
-  setStatus("Searching Robinhood Chain...");
-
-  el("details").classList.add("hidden");
-  el("results").innerHTML = "";
-
-  try{
-    let pairs = await getSearchPairs(query,signal);
-
-    if(thisId !== requestId) return;
-
-    pairs = pairs.filter(pair=>
-      String(pair.chainId || "").toLowerCase() === CHAIN
-    );
-
-    let tokens = uniqueTokens(pairs);
-
-    if(isAddress(query)){
-      tokens = tokens.filter(token=>
-        token.address.toLowerCase() === query.toLowerCase()
+async function searchTokens(rawQuery) {
+  const query = rawQuery.trim();
+  if (!query) { setStatus("Enter a token name, symbol or contract address."); return; }
+  if (searchController) searchController.abort();
+  searchController = new AbortController();
+  const signal = searchController.signal;
+  setStatus("Searching token market data…");
+  $("details").classList.add("hidden");
+  $("results").innerHTML = "";
+  try {
+    let pairs;
+    if (isAddress(query)) {
+      const data = await fetchJSON(DEX_TOKEN_URL + encodeURIComponent(query),signal);
+      pairs = Array.isArray(data) ? data : (Array.isArray(data.pairs) ? data.pairs : []);
+    } else {
+      const data = await fetchJSON(DEX_SEARCH_URL + encodeURIComponent(query),signal);
+      pairs = Array.isArray(data.pairs) ? data.pairs : [];
+    }
+    const robinhoodPairs = pairs.filter(pairChainMatches);
+    let tokens = tokenListFromPairs(robinhoodPairs);
+    if (isAddress(query)) {
+      tokens = tokens.filter(token => token.address.toLowerCase() === query.toLowerCase());
+    } else {
+      const q = query.toLowerCase();
+      tokens = tokens.filter(token =>
+        String(token.name || "").toLowerCase().includes(q) ||
+        String(token.symbol || "").toLowerCase().includes(q)
       );
-    }else{
-      tokens = tokens.filter(token=>tokenMatches(token,query));
     }
-
-    tokens.sort((a,b)=>
-      number(b.pair?.liquidity?.usd) -
-      number(a.pair?.liquidity?.usd)
-    );
-
+    tokens.sort((a,b) => Number(b.pair?.liquidity?.usd || 0) - Number(a.pair?.liquidity?.usd || 0));
     searchResults = tokens;
-
     renderResults(tokens);
-
-    setStatus(
-      tokens.length
-      ? "Found "+tokens.length+" token result(s) on Robinhood Chain."
-      : "No matching Robinhood Chain tokens found."
-    );
-
-    if(isAddress(query) && tokens.length){
-      openToken(0);
-    }
-
-  }catch(error){
-    if(error.name === "AbortError") return;
-    console.error(error);
-    setStatus("Search failed. Please try again.",true);
+    setStatus(tokens.length ? `Found ${tokens.length} matching token result(s).` : "Search completed, but no matching Robinhood Chain pair was returned.");
+    if (isAddress(query) && tokens.length) openToken(0);
+  } catch (error) {
+    if (error.name === "AbortError") return;
+    console.error("YALO search error:",error);
+    setStatus("Search could not load data. The provider may be unavailable or the token may not have a listed trading pair. Please try again.",true);
   }
 }
-
-function openToken(in
+function setMetric(id,value) { $(id).textContent = value ?? "--"; }
+function backToResults() {
+  $("details").classList.add("hidden");
+  $("results").scrollIntoView({behavior:"smooth",block:"
