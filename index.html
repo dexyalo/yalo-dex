@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -35,7 +36,7 @@ section{padding:65px 0}.section-title{text-align:center;margin-bottom:30px}.sect
 .result-card button{border:1px solid var(--yellow);color:var(--yellow);background:transparent;padding:8px 11px;border-radius:8px;font-weight:850;cursor:pointer}
 .hidden{display:none!important}
 .detail-head{display:flex;align-items:center;gap:15px;flex-wrap:wrap;margin-bottom:22px}.detail-head .token-logo{width:65px;height:65px;font-size:22px}.detail-name{flex:1;min-width:180px}.detail-name h2{font-size:25px;line-height:1.2}.detail-name p{color:var(--muted);font-size:12px}
-.verified{color:var(--yellow);font-size:11px;border:1px solid var(--border);padding:5px 9px;border-radius:20px}
+.verified{color:var(--yellow);font-size:11px;border:1px solid var(--border);padding:5px 9px;border-radius:20px}.live-indicator{display:inline-flex;align-items:center;gap:7px;color:#a8ff60;font-size:11px;font-weight:850;border:1px solid rgba(168,255,96,.25);padding:5px 9px;border-radius:20px}.live-dot{width:7px;height:7px;border-radius:50%;background:#a8ff60;box-shadow:0 0 9px #a8ff60;animation:livePulse 1.2s infinite}@keyframes livePulse{50%{opacity:.35}}
 .price-area{margin:20px 0}.price{font-size:clamp(28px,5vw,43px);font-weight:950;letter-spacing:-1px}.change{font-size:13px;font-weight:850}.green{color:#a8ff60}.red{color:var(--red)}
 .metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:22px 0}.metric{background:#0b0b0b;border:1px solid #292400;border-radius:11px;padding:15px}.metric span{display:block;color:var(--muted);font-size:11px}.metric strong{display:block;font-size:16px;margin-top:5px;overflow-wrap:anywhere}
 .detail-actions{display:flex;gap:9px;flex-wrap:wrap;margin:18px 0}.action{background:#1b1b1b;border:1px solid #383000;color:white;border-radius:8px;padding:10px 13px;font-size:12px;font-weight:750;cursor:pointer}.action:hover{border-color:var(--yellow)}
@@ -78,7 +79,7 @@ footer{border-top:1px solid var(--border);padding:27px 0;color:var(--muted);font
 <div class="detail-head">
 <div class="token-logo" id="detailLogo">Y</div>
 <div class="detail-name"><h2 id="detailName">Token</h2><p id="detailSymbol">TOKEN · Robinhood Chain</p></div>
-<span class="verified">● TOKEN DATA</span>
+<span class="verified">● TOKEN DATA</span><span class="live-indicator"><i class="live-dot"></i> LIVE · 5s</span>
 </div>
 <div class="price-area"><div class="price" id="detailPrice">--</div><div class="change" id="detailChange">24H: --</div></div>
 <div class="metrics">
@@ -143,6 +144,9 @@ let searchResults = [];
 let selectedTokenAddress = "";
 let selectedPairs = [];
 let detailController = null;
+let liveRefreshTimer = null;
+let activeToken = null;
+const LIVE_REFRESH_MS = 5000;
 
 const $ = id => document.getElementById(id);
 $("year").textContent = new Date().getFullYear();
@@ -215,6 +219,7 @@ function renderResults(tokens) {
   const root = $("results");
   if (!tokens.length) {
     root.innerHTML = '<div class="status">No matching Robinhood Chain token was found. Check the spelling or contract address.</div>';
+  
     return;
   }
   root.innerHTML = tokens.map((token,index) => {
@@ -234,6 +239,8 @@ function renderResults(tokens) {
   });
 }
 async function searchTokens(rawQuery) {
+  stopLiveTracking();
+  activeToken = null;
   const query = rawQuery.trim();
   if (!query) { setStatus("Enter a token name, symbol or contract address."); return; }
   if (searchController) searchController.abort();
@@ -275,5 +282,162 @@ async function searchTokens(rawQuery) {
 }
 function setMetric(id,value) { $(id).textContent = value ?? "--"; }
 function backToResults() {
+  stopLiveTracking();
+  activeToken = null;
   $("details").classList.add("hidden");
-  $("results").scrollIntoView({behavior:"smooth",block:"
+  $("results").scrollIntoView({behavior:"smooth",block:"center"});
+}
+async function openToken(index) {
+  const token = searchResults[index];
+  if (!token) return;
+  if (detailController) detailController.abort();
+  detailController = new AbortController();
+  const signal = detailController.signal;
+  selectedTokenAddress = token.address;
+  activeToken = token;
+  startLiveTracking();
+  selectedPairs = [];
+  const pair = token.pair || {};
+  $("details").classList.remove("hidden");
+  $("details").scrollIntoView({behavior:"smooth",block:"start"});
+  $("detailName").textContent = token.name || "Unknown Token";
+  $("detailSymbol").textContent = `${token.symbol || "TOKEN"} · Robinhood Chain`;
+  $("detailLogo").innerHTML = pair.info?.imageUrl
+    ? `<img src="${safe(pair.info.imageUrl)}" alt="" onerror="this.style.display='none'">`
+    : safe((token.symbol || "?").slice(0,1).toUpperCase());
+  setMetric("detailPrice",fmtMoney(pair.priceUsd));
+  const change = Number(pair.priceChange?.h24);
+  $("detailChange").textContent = Number.isFinite(change) ? `${change >= 0 ? "+" : ""}${change.toFixed(2)}% (24H)` : "24H change: --";
+  $("detailChange").className = "change " + (change >= 0 ? "green" : "red");
+  setMetric("marketCap",pair.marketCap == null ? "--" : fmtMoney(pair.marketCap));
+  setMetric("fdv",pair.fdv == null ? "--" : fmtMoney(pair.fdv));
+  setMetric("volume",fmtMoney(pair.volume?.h24));
+  setMetric("liquidity",fmtMoney(pair.liquidity?.usd));
+  setMetric("holders","Not supplied by market-data API");
+  setMetric("supply","Not supplied by market-data API");
+  setMetric("buys",pair.txns?.h24?.buys ?? "--");
+  setMetric("sells",pair.txns?.h24?.sells ?? "--");
+  setMetric("dexName",pair.dexId || "--");
+  setMetric("contractAddress",token.address);
+  $("explorerLink").href = `${EXPLORER_URL}/token/${encodeURIComponent(token.address)}`;
+  $("dexLink").href = pair.url || `${EXPLORER_URL}/token/${encodeURIComponent(token.address)}`;
+  $("chartFrame").src = pair.pairAddress
+    ? `https://dexscreener.com/robinhood/${encodeURIComponent(pair.pairAddress)}?embed=1&theme=dark&trades=0&info=0`
+    : "about:blank";
+  $("pairRows").innerHTML = '<tr><td colspan="6">Loading available trading pairs…</td></tr>';
+  $("transactions").innerHTML = '<div class="status">Transaction history is not provided by the selected market-data result.</div>';
+  try {
+    const data = await fetchJSON(DEX_TOKEN_URL + encodeURIComponent(token.address),signal);
+    const pairs = (Array.isArray(data) ? data : (Array.isArray(data.pairs) ? data.pairs : [])).filter(pairChainMatches);
+    if (signal.aborted || selectedTokenAddress.toLowerCase() !== token.address.toLowerCase()) return;
+    selectedPairs = pairs.length ? pairs : [pair];
+    renderPairs(selectedPairs);
+    const best = selectedPairs.slice().sort((a,b) => Number(b.liquidity?.usd || 0) - Number(a.liquidity?.usd || 0))[0];
+    if (best) {
+      setMetric("detailPrice",fmtMoney(best.priceUsd));
+      setMetric("marketCap",best.marketCap == null ? "--" : fmtMoney(best.marketCap));
+      setMetric("fdv",best.fdv == null ? "--" : fmtMoney(best.fdv));
+      setMetric("volume",fmtMoney(best.volume?.h24));
+      setMetric("liquidity",fmtMoney(best.liquidity?.usd));
+      setMetric("buys",best.txns?.h24?.buys ?? "--");
+      setMetric("sells",best.txns?.h24?.sells ?? "--");
+      setMetric("dexName",best.dexId || "--");
+      $("dexLink").href = best.url || $("dexLink").href;
+      if (best.pairAddress) $("chartFrame").src = `https://dexscreener.com/robinhood/${encodeURIComponent(best.pairAddress)}?embed=1&theme=dark&trades=0&info=0`;
+    }
+  } catch (error) {
+    if (error.name !== "AbortError") {
+      console.warn("YALO pair detail request failed:",error);
+      $("pairRows").innerHTML = '<tr><td colspan="6">Could not load additional pair data. Initial market data is shown above.</td></tr>';
+    }
+  }
+}
+
+function stopLiveTracking() {
+  if (liveRefreshTimer) {
+    clearInterval(liveRefreshTimer);
+    liveRefreshTimer = null;
+  }
+}
+
+function startLiveTracking() {
+  stopLiveTracking();
+  liveRefreshTimer = setInterval(refreshLiveToken, LIVE_REFRESH_MS);
+}
+
+async function refreshLiveToken() {
+  const token = activeToken;
+  if (!token || !selectedTokenAddress || $("details").classList.contains("hidden")) return;
+
+  try {
+    const data = await fetchJSON(DEX_TOKEN_URL + encodeURIComponent(token.address));
+    const pairs = (Array.isArray(data) ? data : (Array.isArray(data.pairs) ? data.pairs : []))
+      .filter(pairChainMatches);
+
+    if (!activeToken || selectedTokenAddress.toLowerCase() !== token.address.toLowerCase()) return;
+    if (!pairs.length) return;
+
+    selectedPairs = pairs;
+    const best = pairs.slice().sort(
+      (a,b) => Number(b.liquidity?.usd || 0) - Number(a.liquidity?.usd || 0)
+    )[0];
+
+    if (!best) return;
+
+    setMetric("detailPrice", fmtMoney(best.priceUsd));
+    const change = Number(best.priceChange?.h24);
+    $("detailChange").textContent = Number.isFinite(change)
+      ? `${change >= 0 ? "+" : ""}${change.toFixed(2)}% (24H)`
+      : "24H change: --";
+    $("detailChange").className = "change " + (Number.isFinite(change) && change < 0 ? "red" : "green");
+
+    setMetric("marketCap", best.marketCap == null ? "--" : fmtMoney(best.marketCap));
+    setMetric("fdv", best.fdv == null ? "--" : fmtMoney(best.fdv));
+    setMetric("volume", fmtMoney(best.volume?.h24));
+    setMetric("liquidity", fmtMoney(best.liquidity?.usd));
+    setMetric("buys", best.txns?.h24?.buys ?? "--");
+    setMetric("sells", best.txns?.h24?.sells ?? "--");
+    setMetric("dexName", best.dexId || "--");
+    $("dexLink").href = best.url || $("dexLink").href;
+    renderPairs(pairs);
+  } catch (error) {
+    if (error.name !== "AbortError") {
+      console.warn("YALO live token refresh failed:", error);
+    }
+  }
+}
+
+function renderPairs(pairs) {
+  if (!pairs.length) {
+    $("pairRows").innerHTML = '<tr><td colspan="6">No trading pairs returned.</td></tr>';
+    return;
+  }
+  $("pairRows").innerHTML = pairs.map(pair => {
+    const pairName = `${pair.baseToken?.symbol || "?"}/${pair.quoteToken?.symbol || "?"}`;
+    return `<tr><td>${safe(pairName)}</td><td>${safe(pair.dexId || "--")}</td>
+      <td>${safe(fmtMoney(pair.priceUsd))}</td><td>${safe(fmtMoney(pair.liquidity?.usd))}</td>
+      <td>${safe(fmtMoney(pair.volume?.h24))}</td>
+      <td>${pair.url ? `<a class="action" href="${safe(pair.url)}" target="_blank" rel="noopener">Open ↗</a>` : "--"}</td></tr>`;
+  }).join("");
+}
+async function copyContract() {
+  if (!selectedTokenAddress) return;
+  try {
+    await navigator.clipboard.writeText(selectedTokenAddress);
+    $("copyButton").textContent = "Copied";
+    setTimeout(() => $("copyButton").textContent = "Copy",1500);
+  } catch {
+    const field = document.createElement("textarea");
+    field.value = selectedTokenAddress;
+    document.body.appendChild(field);
+    field.select();
+    document.execCommand("copy");
+    field.remove();
+    $("copyButton").textContent = "Copied";
+    setTimeout(() => $("copyButton").textContent = "Copy",1500);
+  }
+}
+setStatus("Ready. Search for a token to begin.");
+</script>
+</body>
+</html>
