@@ -6,7 +6,6 @@
 <meta name="theme-color" content="#080b14">
 <meta name="description" content="YALO DEX - Your gateway to decentralized finance and live Robinhood Chain token markets.">
 <title>YALO DEX | Decentralized Finance</title>
-
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
@@ -44,7 +43,10 @@ header{
   height:76px;display:flex;align-items:center;
   justify-content:space-between;
 }
-.logo{display:flex;align-items:center;gap:11px;font-weight:900;font-size:22px}
+.logo{
+  display:flex;align-items:center;gap:11px;
+  font-weight:900;font-size:22px;
+}
 .logo-icon{
   width:39px;height:39px;border-radius:12px;
   display:grid;place-items:center;
@@ -52,10 +54,11 @@ header{
   font-weight:900;font-size:21px;
 }
 .logo span{color:var(--green)}
-.nav-links{display:flex;gap:25px;align-items:center}
-.nav-links a{font-size:13px;color:var(--muted);font-weight:600}
+.nav-links{display:flex;gap:22px;align-items:center}
+.nav-links a{
+  font-size:12px;color:var(--muted);font-weight:600;
+}
 .nav-links a:hover{color:var(--green)}
-
 .btn{
   display:inline-flex;align-items:center;justify-content:center;
   gap:9px;border:0;border-radius:10px;
@@ -63,17 +66,32 @@ header{
   transition:.2s;
 }
 .btn-primary{background:var(--green);color:#08100a}
-.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 25px #a6ff5530}
-.btn-outline{border:1px solid var(--border);background:var(--panel);color:white}
-.menu-btn{display:none;background:none;color:white;border:0;font-size:23px}
+.btn-primary:hover{
+  transform:translateY(-2px);
+  box-shadow:0 8px 25px #a6ff5530;
+}
+.btn-outline{
+  border:1px solid var(--border);
+  background:var(--panel);color:white;
+}
+.menu-btn{
+  display:none;background:none;color:white;
+  border:0;font-size:23px;
+}
 
-.hero{padding:100px 0 80px;position:relative;overflow:hidden}
+.hero{
+  padding:100px 0 80px;
+  position:relative;overflow:hidden;
+}
 .hero:before{
   content:"";position:absolute;width:500px;height:500px;
   background:#a6ff5510;filter:blur(100px);
   border-radius:50%;top:-200px;left:30%;
 }
-.hero-content{position:relative;max-width:780px;margin:auto;text-align:center}
+.hero-content{
+  position:relative;max-width:780px;
+  margin:auto;text-align:center;
+}
 .tag{
   display:inline-flex;align-items:center;gap:8px;
   padding:9px 14px;border:1px solid #a6ff5535;
@@ -88,8 +106,14 @@ header{
   margin:25px 0 20px;font-weight:900;
 }
 .hero h1 span{color:var(--green)}
-.hero p{color:var(--muted);line-height:1.8;font-size:15px;max-width:610px;margin:auto}
-.hero-actions{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-top:32px}
+.hero p{
+  color:var(--muted);line-height:1.8;
+  font-size:15px;max-width:610px;margin:auto;
+}
+.hero-actions{
+  display:flex;justify-content:center;
+  gap:12px;flex-wrap:wrap;margin-top:32px;
+}
 .hero-stats{
   display:grid;grid-template-columns:repeat(3,1fr);
   max-width:650px;margin:65px auto 0;
@@ -103,37 +127,51 @@ header{
 
 section{padding:75px 0}
 .section-heading{text-align:center;margin-bottom:38px}
-.section-heading small{color:var(--green);font-weight:800;letter-spacing:2px;font-size:10px}
-.section-heading h2{font-size:clamp(27px,5vw,39px);margin:12px 0}
-.section-heading p{color:var(--muted);font-size:13px;line-height:1.8}
-
+.section-heading small{
+  color:var(--green);font-weight:800;
+  letter-spacing:2px;font-size:10px;
+}
+.section-heading h2{
+  font-size:clamp(27px,5vw,39px);margin:12px 0;
+}
+.section-heading p{
+  color:var(--muted);font-size:13px;line-height:1.8;
+}
 .panel{
-  background:var(--panel);border:1px solid var(--border);
+  background:var(--panel);
+  border:1px solid var(--border);
   border-radius:17px;padding:24px;
 }
 .announcement{
   border:1px solid #a6ff5530;
   background:linear-gradient(120deg,#a6ff5512,#101626 70%);
   border-radius:18px;padding:30px;
-  display:flex;align-items:center;justify-content:space-between;gap:20px;
+  display:flex;align-items:center;
+  justify-content:space-between;gap:20px;
 }
 .announcement h2{font-size:25px;margin:12px 0}
-.announcement p{font-size:13px;line-height:1.8;color:var(--muted);max-width:650px}
+.announcement p{
+  font-size:13px;line-height:1.8;
+  color:var(--muted);max-width:650px;
+}
 .coming{
   display:inline-block;padding:6px 10px;
   border-radius:20px;background:#ffb84d15;
   border:1px solid #ffb84d40;color:#ffbd61;
   font-size:9px;font-weight:900;letter-spacing:1px;
 }
-
 .features{
   display:grid;grid-template-columns:repeat(3,1fr);gap:16px;
 }
 .feature{
-  background:var(--panel);border:1px solid var(--border);
+  background:var(--panel);
+  border:1px solid var(--border);
   border-radius:15px;padding:23px;transition:.2s;
 }
-.feature:hover{transform:translateY(-4px);border-color:#a6ff5550}
+.feature:hover{
+  transform:translateY(-4px);
+  border-color:#a6ff5550;
+}
 .feature-icon{
   width:43px;height:43px;border-radius:12px;
   display:grid;place-items:center;
@@ -141,25 +179,32 @@ section{padding:75px 0}
   font-size:18px;margin-bottom:18px;
 }
 .feature h3{font-size:15px;margin-bottom:9px}
-.feature p{font-size:12px;line-height:1.7;color:var(--muted);margin-bottom:17px}
-.feature-bottom{display:flex;align-items:center;justify-content:space-between}
+.feature p{
+  font-size:12px;line-height:1.7;
+  color:var(--muted);margin-bottom:17px;
+}
+.feature-bottom{
+  display:flex;align-items:center;
+  justify-content:space-between;gap:8px;
+}
 .feature-bottom span{font-size:10px;color:var(--muted)}
-.feature-bottom button{
-  background:none;border:0;color:var(--green);
-  font-size:11px;font-weight:800;
-}
-
 .overview{
-  display:grid;grid-template-columns:1fr 1fr;gap:35px;align-items:center
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:35px;align-items:center;
 }
-.overview h2{font-size:36px;line-height:1.2;margin:15px 0}
-.overview p{font-size:13px;color:var(--muted);line-height:1.9}
+.overview h2{
+  font-size:36px;line-height:1.2;margin:15px 0;
+}
+.overview p{
+  font-size:13px;color:var(--muted);line-height:1.9;
+}
 .checks{margin-top:24px;display:grid;gap:15px}
 .check{display:flex;gap:12px;align-items:center;font-size:13px}
 .check i{color:var(--green)}
 .overview-card{
   background:linear-gradient(145deg,#17243a,#0c1220);
-  border:1px solid var(--border);border-radius:20px;padding:28px;
+  border:1px solid var(--border);
+  border-radius:20px;padding:28px;
 }
 .overview-card h3{font-size:17px;margin-bottom:20px}
 .fake-row{
@@ -168,32 +213,44 @@ section{padding:75px 0}
   font-size:12px;
 }
 .fake-row span:last-child{color:var(--green)}
-
 .community{
   text-align:center;padding:45px 25px;
   border:1px solid var(--border);border-radius:20px;
   background:linear-gradient(140deg,#a6ff5510,#101626);
 }
 .community h2{font-size:30px;margin-bottom:12px}
-.community p{color:var(--muted);font-size:13px;line-height:1.8}
-.socials{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-top:25px}
+.community p{
+  color:var(--muted);font-size:13px;line-height:1.8;
+}
+.socials{
+  display:flex;justify-content:center;
+  gap:12px;flex-wrap:wrap;margin-top:25px;
+}
 .social{
   width:48px;height:48px;border-radius:13px;
-  border:1px solid var(--border);background:var(--panel);
+  border:1px solid var(--border);
+  background:var(--panel);
   display:grid;place-items:center;font-size:18px;
   transition:.2s;
 }
-.social:hover{color:var(--green);border-color:var(--green);transform:translateY(-3px)}
-
+.social:hover{
+  color:var(--green);border-color:var(--green);
+  transform:translateY(-3px);
+}
 footer{border-top:1px solid var(--border);padding:35px 0}
-.footer-content{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap}
-.footer-content p{font-size:11px;color:var(--muted);line-height:1.8}
+.footer-content{
+  display:flex;justify-content:space-between;
+  align-items:center;gap:20px;flex-wrap:wrap;
+}
+.footer-content p{
+  font-size:11px;color:var(--muted);line-height:1.8;
+}
 .footer-links{display:flex;gap:18px;flex-wrap:wrap}
 .footer-links a{font-size:11px;color:var(--muted)}
 .footer-links a:hover{color:var(--green)}
-
 .notice{
-  position:fixed;bottom:25px;left:50%;transform:translate(-50%,150px);
+  position:fixed;bottom:25px;left:50%;
+  transform:translate(-50%,150px);
   background:#18243a;border:1px solid #a6ff5550;
   color:white;padding:15px 20px;border-radius:12px;
   z-index:300;font-size:12px;transition:.3s;
@@ -202,72 +259,49 @@ footer{border-top:1px solid var(--border);padding:35px 0}
 }
 .notice.show{transform:translate(-50%,0)}
 
-/* YALO TOKEN TRACKER */
+/* TOKEN TRACKER */
 .tracker-panel{
   background:var(--panel);
   border:1px solid var(--border);
-  border-radius:17px;
-  padding:24px;
+  border-radius:17px;padding:24px;
 }
 .tracker-top{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:15px;
-  flex-wrap:wrap;
+  display:flex;justify-content:space-between;
+  align-items:center;gap:15px;flex-wrap:wrap;
 }
 .tracker-top h3{font-size:17px}
 .tracker-status{
-  color:var(--muted);
-  font-size:11px;
-  margin-top:7px;
-  line-height:1.6;
+  color:var(--muted);font-size:11px;
+  margin-top:7px;line-height:1.6;
 }
 .tracker-live{
-  color:var(--green);
-  font-size:10px;
-  font-weight:800;
+  color:var(--green);font-size:10px;font-weight:800;
 }
 .tracker-live i{font-size:7px;margin-right:5px}
 .tracker-search{
-  display:flex;
-  gap:10px;
-  margin:25px 0 15px;
+  display:flex;gap:10px;margin:25px 0 15px;
 }
 .tracker-search input{
-  flex:1;
-  min-width:0;
-  padding:14px;
-  border-radius:10px;
-  background:#080b14;
-  border:1px solid var(--border);
-  color:white;
-  font-family:inherit;
-  outline:none;
+  flex:1;min-width:0;padding:14px;
+  border-radius:10px;background:#080b14;
+  border:1px solid var(--border);color:white;
+  font-family:inherit;outline:none;
 }
 .tracker-search input:focus{border-color:var(--green)}
 .tracker-controls{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:12px;
-  flex-wrap:wrap;
+  display:flex;justify-content:space-between;
+  align-items:center;gap:12px;flex-wrap:wrap;
   margin-bottom:15px;
 }
 .tracker-table-wrap{overflow-x:auto}
 .tracker-table{
-  width:100%;
-  border-collapse:collapse;
-  min-width:760px;
-  font-size:12px;
+  width:100%;border-collapse:collapse;
+  min-width:760px;font-size:12px;
 }
 .tracker-table th{
-  text-align:left;
-  padding:15px 12px;
-  color:var(--muted);
-  font-size:10px;
-  letter-spacing:.6px;
-  border-bottom:1px solid var(--border);
+  text-align:left;padding:15px 12px;
+  color:var(--muted);font-size:10px;
+  letter-spacing:.6px;border-bottom:1px solid var(--border);
 }
 .tracker-table td{
   padding:16px 12px;
@@ -280,27 +314,26 @@ footer{border-top:1px solid var(--border);padding:35px 0}
 .tracker-dex{color:var(--muted);font-size:10px;margin-top:5px}
 .tracker-table a{color:var(--green);font-weight:700}
 .tracker-empty{
-  padding:38px 10px;
-  text-align:center;
-  color:var(--muted);
-  font-size:12px;
+  padding:38px 10px;text-align:center;
+  color:var(--muted);font-size:12px;
 }
-.tracker-empty i{font-size:24px;color:var(--green);margin-bottom:12px}
+.tracker-empty i{
+  font-size:24px;color:var(--green);margin-bottom:12px;
+}
 .tracker-note{
-  font-size:10px;
-  color:var(--muted);
-  line-height:1.8;
-  margin-top:18px;
+  font-size:10px;color:var(--muted);
+  line-height:1.8;margin-top:18px;
 }
 .tracker-actions{display:flex;gap:10px;align-items:center}
 .tracker-search .btn{white-space:nowrap}
 .tracker-table td:first-child{min-width:145px}
 .tracker-error{color:#ff7777}
-
+.positive{color:#58e69a}
+.negative{color:#ff7777}
 @media(max-width:800px){
   .nav-links{
-    display:none;position:absolute;top:76px;left:0;width:100%;
-    background:#0d1321;padding:25px;
+    display:none;position:absolute;top:76px;left:0;
+    width:100%;background:#0d1321;padding:25px;
     flex-direction:column;align-items:flex-start;
     border-bottom:1px solid var(--border);
   }
@@ -329,7 +362,6 @@ footer{border-top:1px solid var(--border);padding:35px 0}
 </head>
 
 <body>
-
 <header>
   <div class="container nav">
     <a class="logo" href="#home">
@@ -358,7 +390,6 @@ footer{border-top:1px solid var(--border);padding:35px 0}
 
 <main>
 
-<!-- HERO -->
 <section class="hero" id="home">
   <div class="container hero-content">
     <div class="tag">
@@ -397,7 +428,6 @@ footer{border-top:1px solid var(--border);padding:35px 0}
   </div>
 </section>
 
-<!-- TOKEN ANNOUNCEMENT -->
 <section id="token">
   <div class="container">
     <div class="announcement">
@@ -415,24 +445,25 @@ footer{border-top:1px solid var(--border);padding:35px 0}
   </div>
 </section>
 
-<!-- YALO TOKEN TRACKER -->
+<!-- TOKEN TRACKER -->
 <section id="tracker">
   <div class="container">
-
     <div class="section-heading">
       <small>LIVE BLOCKCHAIN DATA</small>
-      <h2>YALO Token Tracker</h2>
+      <h2>Robinhood Chain Token Tracker</h2>
       <p>
-        Search and track tokens trading on Robinhood Chain.
+        Search tokens by name, symbol or contract address.
         Powered by DEX Screener market data.
       </p>
     </div>
 
     <div class="tracker-panel">
-
       <div class="tracker-top">
         <div>
-          <h3><i class="fa-solid fa-chart-line" style="color:var(--green)"></i> Robinhood Chain Markets</h3>
+          <h3>
+            <i class="fa-solid fa-chart-line" style="color:var(--green)"></i>
+            Robinhood Chain Markets
+          </h3>
           <p class="tracker-status">Network: Robinhood Chain</p>
         </div>
 
@@ -445,7 +476,7 @@ footer{border-top:1px solid var(--border);padding:35px 0}
         <input
           type="text"
           id="tokenSearch"
-          placeholder="Search token name, symbol or contract address..."
+          placeholder="Token name, symbol or contract address..."
           autocomplete="off"
           required
         >
@@ -456,7 +487,7 @@ footer{border-top:1px solid var(--border);padding:35px 0}
 
       <div class="tracker-controls">
         <p class="tracker-status" id="trackerStatus" aria-live="polite">
-          Enter a token name, symbol or contract address to begin.
+          Loading token market data...
         </p>
 
         <div class="tracker-actions">
@@ -485,7 +516,7 @@ footer{border-top:1px solid var(--border);padding:35px 0}
               <td colspan="7">
                 <div class="tracker-empty">
                   <i class="fa-solid fa-chart-simple"></i>
-                  <p>Search for a token to view its live market data.</p>
+                  <p>Loading market data...</p>
                 </div>
               </td>
             </tr>
@@ -494,19 +525,16 @@ footer{border-top:1px solid var(--border);padding:35px 0}
       </div>
 
       <p class="tracker-note">
-        Market data is provided by DEX Screener. Prices and market information
-        may change rapidly. Results depend on available trading pairs and
-        third-party API availability. This tracker does not execute trades.
+        Market data is provided by DEX Screener. Prices and market information may change rapidly.
+        Results depend on available trading pairs and third-party API availability.
+        This tracker does not execute trades.
       </p>
-
     </div>
   </div>
 </section>
 
-<!-- FEATURES -->
 <section id="features">
   <div class="container">
-
     <div class="section-heading">
       <small>EXPLORE OUR PLATFORM</small>
       <h2>Everything in One Ecosystem</h2>
@@ -603,12 +631,10 @@ footer{border-top:1px solid var(--border);padding:35px 0}
   </div>
 </section>
 
-<!-- ECOSYSTEM -->
 <section id="ecosystem">
   <div class="container overview">
-
     <div>
       <span class="tag">ABOUT YALO DEX</span>
       <h2>A New Vision for Decentralized Finance.</h2>
-
-     
+      <p>
+        YALO DEX is building toward a connected digital
