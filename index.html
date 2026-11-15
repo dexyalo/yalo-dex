@@ -51,6 +51,7 @@ footer{border-top:1px solid var(--border);padding:27px 0;color:var(--muted);font
 </style>
 </head>
 <body>
+
 <header><div class="container nav">
 <a class="logo" href="#home">YALO<span>.</span></a>
 <nav class="navlinks" id="navlinks">
@@ -87,7 +88,7 @@ footer{border-top:1px solid var(--border);padding:27px 0;color:var(--muted);font
 <div class="metric"><span>FDV</span><strong id="fdv">--</strong></div>
 <div class="metric"><span>24H Volume</span><strong id="volume">--</strong></div>
 <div class="metric"><span>Liquidity</span><strong id="liquidity">--</strong></div>
-<div class="metric"><span>Holders</span><strong id="holders">Not supplied</strong></div>
+<div class="metric"><span>Holders</span><strong id="holders">--</strong></div>
 <div class="metric"><span>Total Supply</span><strong id="supply">--</strong></div>
 <div class="metric"><span>24H Buys</span><strong id="buys">--</strong></div>
 <div class="metric"><span>24H Sells</span><strong id="sells">--</strong></div>
@@ -129,10 +130,12 @@ footer{border-top:1px solid var(--border);padding:27px 0;color:var(--muted);font
 <a href="https://www.facebook.com/profile.php?id=61596664225595" target="_blank" rel="noopener">Facebook</a>
 <a href="mailto:modcrypto@0xyalo.xyz">Email</a>
 </div></div></section>
+
 <footer><div class="container footer-inner"><strong>YALO. © <span id="year"></span></strong><span>Built for the decentralized future.</span></div></footer>
 
 <script>
 "use strict";
+
 const DEX_SEARCH_URL = "https://api.dexscreener.com/latest/dex/search?q=";
 const DEX_TOKEN_URL = "https://api.dexscreener.com/token-pairs/v1/robinhood/";
 const EXPLORER_URL = "https://robinhoodchain.blockscout.com";
@@ -146,28 +149,38 @@ let selectedPairs = [];
 let detailController = null;
 let liveRefreshTimer = null;
 let activeToken = null;
+let statsRequestController = null;
+
 const LIVE_REFRESH_MS = 5000;
 
 const $ = id => document.getElementById(id);
 $("year").textContent = new Date().getFullYear();
 
 $("menuButton").addEventListener("click", () => $("navlinks").classList.toggle("open"));
-document.querySelectorAll(".navlinks a").forEach(link => link.addEventListener("click", () => $("navlinks").classList.remove("open")));
+
+document.querySelectorAll(".navlinks a").forEach(link => {
+  link.addEventListener("click", () => $("navlinks").classList.remove("open"));
+});
+
 $("searchForm").addEventListener("submit", event => {
   event.preventDefault();
   clearTimeout(searchTimer);
   searchTokens($("searchInput").value);
 });
+
 $("searchInput").addEventListener("input", () => {
   clearTimeout(searchTimer);
   const value = $("searchInput").value.trim();
+
   if (!value) {
     setStatus("Ready. Search for a token to begin.");
     $("results").innerHTML = "";
     return;
   }
+
   searchTimer = setTimeout(() => searchTokens(value), 500);
 });
+
 $("copyButton").addEventListener("click", copyContract);
 $("backButton").addEventListener("click", backToResults);
 
@@ -175,180 +188,503 @@ function setStatus(message, isError = false) {
   $("status").textContent = message;
   $("status").classList.toggle("error", isError);
 }
+
 function isAddress(value) {
   return /^0x[a-fA-F0-9]{40}$/.test(value.trim());
 }
+
 function safe(value) {
-  return String(value ?? "").replace(/[&<>"']/g, char => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[char]));
+  return String(value ?? "").replace(/[&<>"']/g, char => ({
+    "&":"&amp;",
+    "<":"&lt;",
+    ">":"&gt;",
+    '"':"&quot;",
+    "'":"&#39;"
+  }[char]));
 }
+
 function shortAddress(value) {
   return value ? value.slice(0,8) + "..." + value.slice(-6) : "--";
 }
+
 function fmtMoney(value) {
   if (value === null || value === undefined || value === "") return "--";
+
   const n = Number(value);
   if (!Number.isFinite(n)) return "--";
-  if (n !== 0 && Math.abs(n) < 0.000001) return "$" + n.toExponential(3);
-  return "$" + n.toLocaleString("en-US",{maximumFractionDigits:8});
+
+  if (n !== 0 && Math.abs(n) < 0.000001) {
+    return "$" + n.toExponential(3);
+  }
+
+  return "$" + n.toLocaleString("en-US", {
+    maximumFractionDigits:8
+  });
 }
+
 function fmtCompact(value) {
   if (value === null || value === undefined || value === "") return "--";
+
   const n = Number(value);
-  return Number.isFinite(n) ? new Intl.NumberFormat("en-US",{notation:"compact",maximumFractionDigits:2}).format(n) : "--";
+
+  return Number.isFinite(n)
+    ? new Intl.NumberFormat("en-US", {
+        notation:"compact",
+        maximumFractionDigits:2
+      }).format(n)
+    : "--";
 }
+
+/* TOTAL SUPPLY FORMATTER */
+function formatTokenSupply(rawSupply, decimals = 18) {
+  if (rawSupply === null || rawSupply === undefined || rawSupply === "") {
+    return "--";
+  }
+
+  try {
+    const value = BigInt(rawSupply);
+    const places = Math.min(Math.max(Number(decimals) || 0, 0), 255);
+    const divisor = 10n ** BigInt(places);
+
+    const whole = value / divisor;
+    const remainder = value % divisor;
+
+    const wholeFormatted = whole.toLocaleString("en-US");
+
+    if (places === 0 || remainder === 0n) {
+      return wholeFormatted;
+    }
+
+    const fraction = remainder
+      .toString()
+      .padStart(places, "0")
+      .replace(/0+$/, "");
+
+    return wholeFormatted + "." + fraction;
+
+  } catch (error) {
+    console.warn("Supply formatting error:", error);
+    return "--";
+  }
+}
+
 async function fetchJSON(url, signal) {
-  const response = await fetch(url,{signal,headers:{"Accept":"application/json"}});
-  if (!response.ok) throw new Error("Provider returned HTTP " + response.status);
+  const response = await fetch(url, {
+    signal,
+    headers:{"Accept":"application/json"}
+  });
+
+  if (!response.ok) {
+    throw new Error("Provider returned HTTP " + response.status);
+  }
+
   return response.json();
 }
+
+/* BLOCKSCOUT TOKEN DATA */
+async function loadTokenStats(address) {
+  if (!address) return;
+
+  if (statsRequestController) {
+    statsRequestController.abort();
+  }
+
+  statsRequestController = new AbortController();
+
+  const signal = statsRequestController.signal;
+
+  const tokenURL =
+    `${EXPLORER_URL}/api/v2/tokens/${encodeURIComponent(address)}`;
+
+  const countersURL = tokenURL + "/counters";
+
+  try {
+    const [tokenResult, countersResult] = await Promise.allSettled([
+      fetchJSON(tokenURL, signal),
+      fetchJSON(countersURL, signal)
+    ]);
+
+    if (signal.aborted) return;
+
+    if (
+      selectedTokenAddress.toLowerCase() !== address.toLowerCase()
+    ) {
+      return;
+    }
+
+    const tokenData =
+      tokenResult.status === "fulfilled"
+        ? tokenResult.value
+        : {};
+
+    const counterData =
+      countersResult.status === "fulfilled"
+        ? countersResult.value
+        : {};
+
+    /* HOLDERS */
+    const holders =
+      tokenData.holders_count ??
+      counterData.token_holders_count ??
+      counterData.holders_count ??
+      null;
+
+    /* TOTAL SUPPLY */
+    const supply = tokenData.total_supply ?? null;
+    const decimals = tokenData.decimals ?? 18;
+
+    if (holders !== null && holders !== undefined) {
+      setMetric(
+        "holders",
+        Number(holders).toLocaleString("en-US")
+      );
+    } else {
+      setMetric("holders", "Unavailable");
+    }
+
+    if (supply !== null && supply !== undefined) {
+      setMetric(
+        "supply",
+        formatTokenSupply(supply, decimals)
+      );
+    } else {
+      setMetric("supply", "Unavailable");
+    }
+
+  } catch (error) {
+    if (error.name === "AbortError") return;
+
+    console.warn("YALO Blockscout stats error:", error);
+
+    if (
+      selectedTokenAddress.toLowerCase() === address.toLowerCase()
+    ) {
+      setMetric("holders", "Unavailable");
+      setMetric("supply", "Unavailable");
+    }
+  }
+}
+
 function pairChainMatches(pair) {
   return String(pair.chainId || "").toLowerCase() === CHAIN_ID;
 }
+
 function tokenListFromPairs(pairs) {
   const map = new Map();
+
+  pairs.forEach(pair {
+  const map = new Map();
+
   pairs.forEach(pair => {
-    [pair.baseToken,pair.quoteToken].forEach(token => {
+    [pair.baseToken, pair.quoteToken].forEach(token => {
       if (!token || !token.address) return;
+
       const key = token.address.toLowerCase();
-      if (!map.has(key)) map.set(key,{...token,pair});
+
+      if (!map.has(key)) {
+        map.set(key, {...token, pair});
+      }
     });
   });
+
   return [...map.values()];
 }
+
 function renderResults(tokens) {
   const root = $("results");
+
   if (!tokens.length) {
-    root.innerHTML = '<div class="status">No matching Robinhood Chain token was found. Check the spelling or contract address.</div>';
-  
+    root.innerHTML =
+      '<div class="status">No matching Robinhood Chain token was found. Check the spelling or contract address.</div>';
     return;
   }
   root.innerHTML = tokens.map((token,index) => {
     const logoUrl = token.pair?.info?.imageUrl;
+
     const logo = logoUrl
       ? `<img src="${safe(logoUrl)}" alt="" onerror="this.style.display='none'">`
       : safe((token.symbol || "?").slice(0,1).toUpperCase());
+
     return `<article class="result-card">
       <div class="token-logo">${logo}</div>
-      <div class="result-info"><strong>${safe(token.name || "Unknown Token")}</strong>
-      <small>${safe(token.symbol || "TOKEN")} · ${safe(shortAddress(token.address))}</small></div>
+      <div class="result-info">
+        <strong>${safe(token.name || "Unknown Token")}</strong>
+        <small>${safe(token.symbol || "TOKEN")} · ${safe(shortAddress(token.address))}</small>
+      </div>
       <button type="button" data-token-index="${index}">View</button>
     </article>`;
   }).join("");
+
   root.querySelectorAll("[data-token-index]").forEach(button => {
-    button.addEventListener("click", () => openToken(Number(button.dataset.tokenIndex)));
+    button.addEventListener("click", () => {
+     openToken(Number(button.dataset.tokenIndex));
+    });
   });
 }
+
 async function searchTokens(rawQuery) {
   stopLiveTracking();
+
   activeToken = null;
+
+  if (detailController) detailController.abort();
+  if (statsRequestController) statsRequestController.abort();
+
   const query = rawQuery.trim();
-  if (!query) { setStatus("Enter a token name, symbol or contract address."); return; }
+
+  if (!query) {
+    setStatus("Enter a token name, symbol or contract address.");
+    return;
+  }
+
   if (searchController) searchController.abort();
+
   searchController = new AbortController();
+
   const signal = searchController.signal;
   setStatus("Searching token market data…");
+
   $("details").classList.add("hidden");
   $("results").innerHTML = "";
+
   try {
     let pairs;
+
     if (isAddress(query)) {
-      const data = await fetchJSON(DEX_TOKEN_URL + encodeURIComponent(query),signal);
-      pairs = Array.isArray(data) ? data : (Array.isArray(data.pairs) ? data.pairs : []);
+      const data = await fetchJSON(
+        DEX_TOKEN_URL + encodeURIComponent(query),
+        signal
+      );
+
+      pairs = Array.isArray(data)
+        ? data
+        : (Array.isArray(data.pairs) ? data.pairs : []);
+
     } else {
-      const data = await fetchJSON(DEX_SEARCH_URL + encodeURIComponent(query),signal);
+      const data = await fetchJSON(
+        DEX_SEARCH_URL + encodeURIComponent(query),
+        signal
+      );
+
       pairs = Array.isArray(data.pairs) ? data.pairs : [];
-    }
-    const robinhoodPairs = pairs.filter(pairChainMatches);
+    } const robinhoodPairs = pairs.filter(pairChainMatches);
+
     let tokens = tokenListFromPairs(robinhoodPairs);
+
     if (isAddress(query)) {
-      tokens = tokens.filter(token => token.address.toLowerCase() === query.toLowerCase());
+      tokens = tokens.filter(token =>
+        token.address.toLowerCase() === query.toLowerCase()
+      );
     } else {
       const q = query.toLowerCase();
+
       tokens = tokens.filter(token =>
         String(token.name || "").toLowerCase().includes(q) ||
         String(token.symbol || "").toLowerCase().includes(q)
       );
     }
-    tokens.sort((a,b) => Number(b.pair?.liquidity?.usd || 0) - Number(a.pair?.liquidity?.usd || 0));
+
+    tokens.sort((a,b) =>
+      Number(b.pair?.liquidity?.usd || 0) -
+      Number(a.pair?.liquidity?.usd || 0)
+    );
+
     searchResults = tokens;
+
     renderResults(tokens);
-    setStatus(tokens.length ? `Found ${tokens.length} matching token result(s).` : "Search completed, but no matching Robinhood Chain pair was returned.");
-    if (isAddress(query) && tokens.length) openToken(0);
+
+    setStatus(
+      tokens.length
+        ? `Found ${tokens.length} matching token result(s).`
+        : "Search completed, but no matching Robinhood Chain pair was returned."
+    );
+
+    if (isAddress(query) && tokens.length) {
+      openToken(0); }
+
   } catch (error) {
     if (error.name === "AbortError") return;
-    console.error("YALO search error:",error);
-    setStatus("Search could not load data. The provider may be unavailable or the token may not have a listed trading pair. Please try again.",true);
+
+    console.error("YALO search error:", error);
+
+    setStatus(
+      "Search could not load data. The provider may be unavailable or the token may not have a listed trading pair. Please try again.",
+      true
+    );
   }
 }
-function setMetric(id,value) { $(id).textContent = value ?? "--"; }
+
+function setMetric(id,value) {
+  $(id).textContent = value ?? "--";
+}
+
 function backToResults() {
   stopLiveTracking();
+
+  if (detailController) detailController.abort();
+  if (statsRequestController) statsRequestController.abort();
+
   activeToken = null;
+
   $("details").classList.add("hidden");
-  $("results").scrollIntoView({behavior:"smooth",block:"center"});
+  
+   $("results").scrollIntoView({
+    behavior:"smooth",
+    block:"center"
+  });
 }
+
 async function openToken(index) {
   const token = searchResults[index];
+
   if (!token) return;
+
   if (detailController) detailController.abort();
+  if (statsRequestController) statsRequestController.abort();
+
   detailController = new AbortController();
+
   const signal = detailController.signal;
+
   selectedTokenAddress = token.address;
   activeToken = token;
-  startLiveTracking();
   selectedPairs = [];
+
   const pair = token.pair || {};
+
   $("details").classList.remove("hidden");
-  $("details").scrollIntoView({behavior:"smooth",block:"start"});
+
+  $("details").scrollIntoView({
+    behavior:"smooth",
+    block:"start"
+  });
   $("detailName").textContent = token.name || "Unknown Token";
-  $("detailSymbol").textContent = `${token.symbol || "TOKEN"} · Robinhood Chain`;
+
+  $("detailSymbol").textContent =
+    `${token.symbol || "TOKEN"} · Robinhood Chain`;
+
   $("detailLogo").innerHTML = pair.info?.imageUrl
     ? `<img src="${safe(pair.info.imageUrl)}" alt="" onerror="this.style.display='none'">`
     : safe((token.symbol || "?").slice(0,1).toUpperCase());
-  setMetric("detailPrice",fmtMoney(pair.priceUsd));
+
+  setMetric("detailPrice", fmtMoney(pair.priceUsd));
+
   const change = Number(pair.priceChange?.h24);
-  $("detailChange").textContent = Number.isFinite(change) ? `${change >= 0 ? "+" : ""}${change.toFixed(2)}% (24H)` : "24H change: --";
-  $("detailChange").className = "change " + (change >= 0 ? "green" : "red");
-  setMetric("marketCap",pair.marketCap == null ? "--" : fmtMoney(pair.marketCap));
-  setMetric("fdv",pair.fdv == null ? "--" : fmtMoney(pair.fdv));
-  setMetric("volume",fmtMoney(pair.volume?.h24));
-  setMetric("liquidity",fmtMoney(pair.liquidity?.usd));
-  setMetric("holders","Not supplied by market-data API");
-  setMetric("supply","Not supplied by market-data API");
-  setMetric("buys",pair.txns?.h24?.buys ?? "--");
-  setMetric("sells",pair.txns?.h24?.sells ?? "--");
-  setMetric("dexName",pair.dexId || "--");
-  setMetric("contractAddress",token.address);
-  $("explorerLink").href = `${EXPLORER_URL}/token/${encodeURIComponent(token.address)}`;
-  $("dexLink").href = pair.url || `${EXPLORER_URL}/token/${encodeURIComponent(token.address)}`;
+
+  $("detailChange").textContent =
+    Number.isFinite(change)
+      ? `${change >= 0 ? "+" : ""}${change.toFixed(2)}% (24H)`
+      : "24H change: --";
+
+  $("detailChange").className =
+    "change " + (change >= 0 ? "green" : "red");
+
+  setMetric(
+    "marketCap",
+    pair.marketCap == null ? "--" : fmtMoney(pair.marketCap)
+  );
+  setMetric(
+    "fdv",
+    pair.fdv == null ? "--" : fmtMoney(pair.fdv)
+  );
+
+  setMetric("volume", fmtMoney(pair.volume?.h24));
+  setMetric("liquidity", fmtMoney(pair.liquidity?.usd));
+
+  /* LOAD REAL HOLDERS AND SUPPLY */
+  setMetric("holders", "Loading...");
+  setMetric("supply", "Loading...");
+
+  loadTokenStats(token.address);
+
+  setMetric("buys", pair.txns?.h24?.buys ?? "--");
+  setMetric("sells", pair.txns?.h24?.sells ?? "--");
+  setMetric("dexName", pair.dexId || "--");
+
+  setMetric("contractAddress", token.address);
+
+  $("explorerLink").href =
+    `${EXPLORER_URL}/token/${encodeURIComponent(token.address)}`;
+  $("dexLink").href =
+    pair.url ||
+    `${EXPLORER_URL}/token/${encodeURIComponent(token.address)}`;
+
   $("chartFrame").src = pair.pairAddress
     ? `https://dexscreener.com/robinhood/${encodeURIComponent(pair.pairAddress)}?embed=1&theme=dark&trades=0&info=0`
     : "about:blank";
-  $("pairRows").innerHTML = '<tr><td colspan="6">Loading available trading pairs…</td></tr>';
-  $("transactions").innerHTML = '<div class="status">Transaction history is not provided by the selected market-data result.</div>';
+
+  $("pairRows").innerHTML =
+    '<tr><td colspan="6">Loading available trading pairs…</td></tr>';
+
+  $("transactions").innerHTML =
+    '<div class="status">Transaction history is not provided by the selected market-data result.</div>';
+
   try {
-    const data = await fetchJSON(DEX_TOKEN_URL + encodeURIComponent(token.address),signal);
-    const pairs = (Array.isArray(data) ? data : (Array.isArray(data.pairs) ? data.pairs : [])).filter(pairChainMatches);
-    if (signal.aborted || selectedTokenAddress.toLowerCase() !== token.address.toLowerCase()) return;
-    selectedPairs = pairs.length ? pairs : [pair];
-    renderPairs(selectedPairs);
-    const best = selectedPairs.slice().sort((a,b) => Number(b.liquidity?.usd || 0) - Number(a.liquidity?.usd || 0))[0];
-    if (best) {
-      setMetric("detailPrice",fmtMoney(best.priceUsd));
-      setMetric("marketCap",best.marketCap == null ? "--" : fmtMoney(best.marketCap));
-      setMetric("fdv",best.fdv == null ? "--" : fmtMoney(best.fdv));
-      setMetric("volume",fmtMoney(best.volume?.h24));
-      setMetric("liquidity",fmtMoney(best.liquidity?.usd));
-      setMetric("buys",best.txns?.h24?.buys ?? "--");
-      setMetric("sells",best.txns?.h24?.sells ?? "--");
-      setMetric("dexName",best.dexId || "--");
-      $("dexLink").href = best.url || $("dexLink").href;
-      if (best.pairAddress) $("chartFrame").src = `https://dexscreener.com/robinhood/${encodeURIComponent(best.pairAddress)}?embed=1&theme=dark&trades=0&info=0`;
+    const data = await fetchJSON(
+      DEX_TOKEN_URL + encodeURIComponent(token.address),
+      signal
+    );
+
+    const pairs = (
+      Array.isArray(data)
+        ? data
+        : (Array.isArray(data.pairs) ? data.pairs : [])
+    ).filter(pairChainMatches);
+
+    if (
+      signal.aborted ||
+      selectedTokenAddress.toLowerCase() !== token.address.toLowerCase()
+    ) {
+      return;
     }
+    selectedPairs = pairs.length ? pairs : [pair];
+
+    renderPairs(selectedPairs);
+
+    const best = selectedPairs.slice().sort((a,b) =>
+      Number(b.liquidity?.usd || 0) -
+      Number(a.liquidity?.usd || 0)
+    )[0];
+
+    if (best) {
+      setMetric("detailPrice", fmtMoney(best.priceUsd));
+
+      setMetric(
+        "marketCap",
+        best.marketCap == null ? "--" : fmtMoney(best.marketCap)
+      );
+
+      setMetric(
+        "fdv",
+        best.fdv == null ? "--" : fmtMoney(best.fdv)
+      );
+
+      setMetric("volume", fmtMoney(best.volume?.h24));
+      setMetric("liquidity", fmtMoney(best.liquidity?.usd));
+      setMetric("buys", best.txns?.h24?.buys ?? "--");
+      setMetric("sells", best.txns?.h24?.sells ?? "--");
+      setMetric("dexName", best.dexId || "--");
+
+      $("dexLink").href = best.url || $("dexLink").href;
+  if (best.pairAddress) {
+        $("chartFrame").src =
+          `https://dexscreener.com/robinhood/${encodeURIComponent(best.pairAddress)}?embed=1&theme=dark&trades=0&info=0`;
+      }
+    }
+
+    /* START AUTOMATIC 5-SECOND LIVE TRACKING */
+    startLiveTracking();
+
   } catch (error) {
     if (error.name !== "AbortError") {
-      console.warn("YALO pair detail request failed:",error);
-      $("pairRows").innerHTML = '<tr><td colspan="6">Could not load additional pair data. Initial market data is shown above.</td></tr>';
+      console.warn("YALO pair detail request failed:", error);
+
+      $("pairRows").innerHTML =
+        '<tr><td colspan="6">Could not load additional pair data. Initial market data is shown above.</td></tr>';
+
+      if (activeToken && selectedTokenAddress === token.address) {
+        startLiveTracking();
+      }
     }
   }
 }
@@ -358,48 +694,88 @@ function stopLiveTracking() {
     clearInterval(liveRefreshTimer);
     liveRefreshTimer = null;
   }
-}
-
-function startLiveTracking() {
+} function startLiveTracking() {
   stopLiveTracking();
-  liveRefreshTimer = setInterval(refreshLiveToken, LIVE_REFRESH_MS);
+
+  liveRefreshTimer = setInterval(
+    refreshLiveToken,
+    LIVE_REFRESH_MS
+  );
 }
 
 async function refreshLiveToken() {
   const token = activeToken;
-  if (!token || !selectedTokenAddress || $("details").classList.contains("hidden")) return;
+
+  if (
+    !token ||
+    !selectedTokenAddress ||
+    $("details").classList.contains("hidden")
+  ) {
+    return;
+  }
 
   try {
-    const data = await fetchJSON(DEX_TOKEN_URL + encodeURIComponent(token.address));
-    const pairs = (Array.isArray(data) ? data : (Array.isArray(data.pairs) ? data.pairs : []))
-      .filter(pairChainMatches);
+    const data = await fetchJSON(
+      DEX_TOKEN_URL + encodeURIComponent(token.address)
+    );
 
-    if (!activeToken || selectedTokenAddress.toLowerCase() !== token.address.toLowerCase()) return;
+    const pairs = (
+      Array.isArray(data)
+        ? data
+        : (Array.isArray(data.pairs) ? data.pairs : [])
+    ).filter(pairChainMatches);
+
+    if (
+      !activeToken ||
+      selectedTokenAddress.toLowerCase() !== token.address.toLowerCase()
+    ) {
+      return;
+    }
+
+    /* REFRESH HOLDERS AND SUPPLY */
+    loadTokenStats(token.address);
+
     if (!pairs.length) return;
 
     selectedPairs = pairs;
-    const best = pairs.slice().sort(
-      (a,b) => Number(b.liquidity?.usd || 0) - Number(a.liquidity?.usd || 0)
+    const best = pairs.slice().sort((a,b) =>
+      Number(b.liquidity?.usd || 0) -
+      Number(a.liquidity?.usd || 0)
     )[0];
 
     if (!best) return;
 
     setMetric("detailPrice", fmtMoney(best.priceUsd));
-    const change = Number(best.priceChange?.h24);
-    $("detailChange").textContent = Number.isFinite(change)
-      ? `${change >= 0 ? "+" : ""}${change.toFixed(2)}% (24H)`
-      : "24H change: --";
-    $("detailChange").className = "change " + (Number.isFinite(change) && change < 0 ? "red" : "green");
 
-    setMetric("marketCap", best.marketCap == null ? "--" : fmtMoney(best.marketCap));
-    setMetric("fdv", best.fdv == null ? "--" : fmtMoney(best.fdv));
-    setMetric("volume", fmtMoney(best.volume?.h24));
+    const change = Number(best.priceChange?.h24);
+
+    $("detailChange").textContent =
+      Number.isFinite(change)
+        ? `${change >= 0 ? "+" : ""}${change.toFixed(2)}% (24H)`
+        : "24H change: --";
+
+    $("detailChange").className =
+      "change " +
+      (Number.isFinite(change) && change < 0 ? "red" : "green");
+
+    setMetric(
+      "marketCap",
+      best.marketCap == null ? "--" : fmtMoney(best.marketCap)
+    );
+
+    setMetric(
+      "fdv",
+      best.fdv == null ? "--" : fmtMoney(best.fdv)
+    ); setMetric("volume", fmtMoney(best.volume?.h24));
     setMetric("liquidity", fmtMoney(best.liquidity?.usd));
     setMetric("buys", best.txns?.h24?.buys ?? "--");
     setMetric("sells", best.txns?.h24?.sells ?? "--");
     setMetric("dexName", best.dexId || "--");
+
     $("dexLink").href = best.url || $("dexLink").href;
+
     renderPairs(pairs);
+
   } catch (error) {
     if (error.name !== "AbortError") {
       console.warn("YALO live token refresh failed:", error);
@@ -409,35 +785,62 @@ async function refreshLiveToken() {
 
 function renderPairs(pairs) {
   if (!pairs.length) {
-    $("pairRows").innerHTML = '<tr><td colspan="6">No trading pairs returned.</td></tr>';
+    $("pairRows").innerHTML =
+      '<tr><td colspan="6">No trading pairs returned.</td></tr>';
     return;
   }
+
   $("pairRows").innerHTML = pairs.map(pair => {
-    const pairName = `${pair.baseToken?.symbol || "?"}/${pair.quoteToken?.symbol || "?"}`;
-    return `<tr><td>${safe(pairName)}</td><td>${safe(pair.dexId || "--")}</td>
-      <td>${safe(fmtMoney(pair.priceUsd))}</td><td>${safe(fmtMoney(pair.liquidity?.usd))}</td>
-      <td>${safe(fmtMoney(pair.volume?.h24))}</td>
-      <td>${pair.url ? `<a class="action" href="${safe(pair.url)}" target="_blank" rel="noopener">Open ↗</a>` : "--"}</td></tr>`;
+    const pairName =
+      `${pair.baseToken?.symbol || "?"}/${pair.quoteToken?.symbol || "?"}`;
+
+    return `<tr>
+      <td>${safe(pairName)}</td>
+      <td>${safe(pair.dexId || "--")}</td>
+      <td>${safe(fmtMoney(pair.priceUsd))}</td>
+      <td>${safe(fmtMoney(pair.liquidity?.usd))}</td>
+      <td>${safe(fmtMoney(pair.volume?.h24))}</td> <td>${pair.url
+        ? `<a class="action" href="${safe(pair.url)}" target="_blank" rel="noopener">Open ↗</a>`
+        : "--"
+      }</td>
+    </tr>`;
   }).join("");
 }
+
 async function copyContract() {
   if (!selectedTokenAddress) return;
+
   try {
     await navigator.clipboard.writeText(selectedTokenAddress);
+
     $("copyButton").textContent = "Copied";
-    setTimeout(() => $("copyButton").textContent = "Copy",1500);
+
+    setTimeout(() => {
+      $("copyButton").textContent = "Copy";
+    },1500);
+
   } catch {
     const field = document.createElement("textarea");
+
     field.value = selectedTokenAddress;
+
     document.body.appendChild(field);
+
     field.select();
+
     document.execCommand("copy");
+
     field.remove();
-    $("copyButton").textContent = "Copied";
-    setTimeout(() => $("copyButton").textContent = "Copy",1500);
+     $("copyButton").textContent = "Copied";
+
+    setTimeout(() => {
+      $("copyButton").textContent = "Copy";
+    },1500);
   }
 }
+
 setStatus("Ready. Search for a token to begin.");
+
 </script>
 </body>
 </html>
